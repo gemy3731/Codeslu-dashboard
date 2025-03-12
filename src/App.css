@@ -1,0 +1,74 @@
+nav.dashboardNav > div{
+    background-color: #232f3e;
+    height:100vh;
+  }
+  .teamIcon{
+    background: linear-gradient(201.18deg, #FF9900 3.14%, #EFFFF6 86.04%);
+  }
+  .teamShadow{
+    box-shadow: 0px 10px 60px 0px #E2ECF980;
+  }
+  .selectTeam select{
+    border:none !important;
+    outline:0 !important;
+  }
+  
+  .selectTeam select:focus{
+    border:none !important;
+    outline:0 !important;
+  }
+  
+  .paginationTeamDash button{
+    color:black !important;
+  }
+  
+  [type='text']:focus,select:focus,[type='number']:focus{
+    --tw-ring-color: #FF9900 !important;
+    border-color: #FF9900 !important;
+  }
+  
+  .file-upload {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding-block: 8px;
+    padding-inline:12px ;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .file-upload input[type="text"] {
+    border: none;
+    outline: none;
+    flex: 1 1 0;
+    --tw-ring-color: white !important;
+    border-color: white !important;
+  }
+  
+  .file-upload input[type="file"] {
+    display: none;
+  }
+  
+  .file-button {
+    background-color: #FF9900;
+    color: white;
+    padding: 4px 16px;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .dashFrom select.placeholder{
+    color:#d9d9d9;
+  }
+  .dashFrom select:not(.placeholder){
+    color:black;
+  }
+  .userImgProfile{
+    width: 70px;
+    height: 70px;
+    background-color:#FF9900;
+    border-radius:50%;
+    font-size:25px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
