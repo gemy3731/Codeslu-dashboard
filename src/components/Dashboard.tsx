@@ -3,6 +3,7 @@ import { RiFoldersFill } from "react-icons/ri";
 import { HiDocumentText } from "react-icons/hi2";
 import { FaStar } from "react-icons/fa6";
 import { FaChartBar } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import { FaDollarSign, FaGlobe } from "react-icons/fa";
 import { ResponsivePie } from "@nivo/pie";
@@ -16,6 +17,7 @@ import AboutUs from "./AboutUs";
 import Portfolio from "./Portfolio";
 import Reviews from "./Reviews";
 import { FaBars } from "react-icons/fa";
+import AddProject from "./AddProject";
 
 
 
@@ -31,10 +33,10 @@ const Dashboard = () => {
          
           <Sidebar
             aria-label="Default sidebar"
-            className="bg-[#232F3E] text-white dashboardNav"
+            className="bg-[#232F3E] text-white dashboardNav "
           >
-            <Sidebar.Items className="bg-[#232f3e]">
-              <Sidebar.ItemGroup>
+            <Sidebar.Items className="bg-[#232f3e] ">
+              <Sidebar.ItemGroup className="flex flex-col">
                 <Sidebar.Item
                   onClick={() => setActiveTab("statistics")}
                   icon={FaChartBar}
@@ -64,6 +66,13 @@ const Dashboard = () => {
                   Portfolio
                 </Sidebar.Item>
                 <Sidebar.Item
+                  onClick={() => setActiveTab("addProject")}
+                  icon={FaPlus}
+                  className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
+                >
+                  Add project
+                </Sidebar.Item>
+                <Sidebar.Item
                   onClick={() => setActiveTab("blog")}
                   icon={HiDocumentText}
                   className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
@@ -78,7 +87,7 @@ const Dashboard = () => {
                   Reviews
                 </Sidebar.Item>
                 <Sidebar.Item
-                  className="absolute bottom-0 hover:bg-[#232F3E]  text-white py-3 px-1"
+                  className="absolute bottom-0 block hover:bg-[#232F3E]  text-white py-3 px-1"
                 >
                   <div className="flex flex-col gap-2 items-center ">
                   <h3 className="text-[18px] font-bold">Welcome, Mustafa</h3>
@@ -308,6 +317,7 @@ const Dashboard = () => {
             {activeTab === "aboutus" && <AboutUs />}
             {activeTab === "portfolio" && <Portfolio />}
             {activeTab === "reviews" && <Reviews />}
+            {activeTab === "addProject" && <AddProject />}
           </div>
         </div>
       </div>
