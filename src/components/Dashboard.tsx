@@ -16,12 +16,14 @@ import Blog from "./Blog";
 import AboutUs from "./AboutUs";
 import Portfolio from "./Portfolio";
 import Reviews from "./Reviews";
+
 const Dashboard = () => {
-    const [activeTab, setActiveTab] = useState('')
+    const [activeTab, setActiveTab] = useState('statistics')
     return <>
     <div className="grid grid-cols-12">
         {/* Sidebar على اليسار */}
         <div className="col-span-2 bg-[#232f3e] overflow-hidden">
+          <div className="fixed top-0 left-0 bottom-0">
           <Sidebar
             aria-label="Default sidebar"
             className="bg-[#232F3E] text-white dashboardNav"
@@ -29,7 +31,7 @@ const Dashboard = () => {
             <Sidebar.Items className="bg-[#232f3e]">
               <Sidebar.ItemGroup>
                 <Sidebar.Item
-                  onClick={() => setActiveTab("statistics")} // تعيين التبويب النشط لـ "statistics"
+                  onClick={() => setActiveTab("statistics")}
                   icon={FaChartBar}
                   className="cursor-pointer uppercase hover:bg-gray-600 hover:text-gray-200 text-white py-2 px-4 rounded-md"
                 >
@@ -70,9 +72,19 @@ const Dashboard = () => {
                 >
                   Reviews
                 </Sidebar.Item>
+                <Sidebar.Item
+                  className="absolute bottom-0 hover:bg-[#232F3E] text-white py-3 px-1"
+                >
+                  <div className="flex flex-col gap-2 items-center ">
+                  <h3 className="text-[18px] font-bold">Welcome, Mustafa</h3>
+                  <h4 className="text-[14px] text-[#7C7C7C] uppercase">Admin</h4>
+                  <button className="bg-gray-700 text-white px-3 py-1 rounded-lg w-[100%]">Sign Out</button>
+                  </div>
+                </Sidebar.Item>
               </Sidebar.ItemGroup>
             </Sidebar.Items>
           </Sidebar>
+          </div>
         </div>
   
         {/* المحتوى الرئيسي في الجهة اليمنى (9 أعمدة) */}

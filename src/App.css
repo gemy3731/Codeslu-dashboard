@@ -1,6 +1,7 @@
 nav.dashboardNav > div{
     background-color: #232f3e;
-    height:100vh;
+    height:100%;
+    position: relative;
   }
   .teamIcon{
     background: linear-gradient(201.18deg, #FF9900 3.14%, #EFFFF6 86.04%);
