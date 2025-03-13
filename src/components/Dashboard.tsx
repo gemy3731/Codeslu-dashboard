@@ -7,7 +7,6 @@ import { useState } from "react";
 import { FaDollarSign, FaGlobe } from "react-icons/fa";
 import { ResponsivePie } from "@nivo/pie";
 import { Sidebar } from "flowbite-react";
-// import { ResponsiveLine } from "@nivo/line";
 import { chartDataTwo } from '../Data/dataTwo';
 import { ResponsiveLine } from "@nivo/line";
 import { chartData } from "../Data/dataOne";
@@ -16,14 +15,20 @@ import Blog from "./Blog";
 import AboutUs from "./AboutUs";
 import Portfolio from "./Portfolio";
 import Reviews from "./Reviews";
+import { FaBars } from "react-icons/fa";
+
+
 
 const Dashboard = () => {
-    const [activeTab, setActiveTab] = useState('statistics')
+    const [activeTab, setActiveTab] = useState('statistics');
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     return <>
-    <div className="grid grid-cols-12">
-        {/* Sidebar على اليسار */}
-        <div className="col-span-2 bg-[#232f3e] overflow-hidden">
-          <div className="fixed top-0 left-0 bottom-0">
+    <div className="grid grid-cols-1 lg:grid-cols-[20%_80%] h-screen">
+        {/* Left hand side*/}
+        <FaBars onClick={() => setIsOpen(!isOpen)} className="lg:hidden fixed top-5 left-5 text-3xl text-[#232f3e] z-50 border-2 border-black rounded-full p-1" />
+        
+        <div className={isOpen?" lg:hidden  bg-[#232f3e] overflow-hidden fixed top-0 left-0 z-30 h-screen":"hidden lg:block bg-[#232f3e] overflow-hidden"}>
+         
           <Sidebar
             aria-label="Default sidebar"
             className="bg-[#232F3E] text-white dashboardNav"
@@ -73,7 +78,7 @@ const Dashboard = () => {
                   Reviews
                 </Sidebar.Item>
                 <Sidebar.Item
-                  className="absolute bottom-0 hover:bg-[#232F3E] text-white py-3 px-1"
+                  className="absolute bottom-0 hover:bg-[#232F3E]  text-white py-3 px-1"
                 >
                   <div className="flex flex-col gap-2 items-center ">
                   <h3 className="text-[18px] font-bold">Welcome, Mustafa</h3>
@@ -84,11 +89,11 @@ const Dashboard = () => {
               </Sidebar.ItemGroup>
             </Sidebar.Items>
           </Sidebar>
-          </div>
+          
         </div>
   
-        {/* المحتوى الرئيسي في الجهة اليمنى (9 أعمدة) */}
-        <div className="col-span-10 overflow-hidden bg-[#edeeee]">
+        {/* Right hand side*/}
+        <div className=" overflow-auto bg-[#edeeee]">
           <div className="col-span-1 md:col-span-10">
             {/* عرض المحتوى بناءً على التبويب النشط */}
             {activeTab === "statistics" && (

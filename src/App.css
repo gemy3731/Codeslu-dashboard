@@ -73,3 +73,8 @@ nav.dashboardNav > div{
     align-items:center;
     justify-content:center;
   }
+  .myGrid{
+    display: grid;
+    grid-template-columns: 20% 80%; 
+
+  }
