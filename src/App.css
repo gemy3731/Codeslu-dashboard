@@ -23,7 +23,7 @@ nav.dashboardNav > div{
     color:black !important;
   }
   
-  [type='text']:focus,select:focus,[type='number']:focus{
+  [type='text']:focus,select:focus,[type='number']:focus,textarea:focus{
     --tw-ring-color: #FF9900 !important;
     border-color: #FF9900 !important;
   }
