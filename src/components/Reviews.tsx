@@ -67,7 +67,7 @@ const Reviews = () => {
   };
   return (
     <>
-      <div className="mt-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
+      <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
         <h2 className="text-[32px] text-center font-[400] leading-[29.05px] mb-[26px]">
           Reviews
         </h2>
@@ -102,13 +102,13 @@ const Reviews = () => {
               placeholder="Role"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
             />
-            <label htmlFor="reviews-rate" className="block">
-              Rate
+            <label htmlFor="reviews-rating" className="block">
+              Rating
             </label>
             <input
               type="number"
-              id="reviews-rate"
-              placeholder="Rate"
+              id="reviews-rating"
+              placeholder="Rating"
               min={0}
               max={5}
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"

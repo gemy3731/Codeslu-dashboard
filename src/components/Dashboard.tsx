@@ -18,7 +18,8 @@ import Portfolio from "./Portfolio";
 import Reviews from "./Reviews";
 import { FaBars } from "react-icons/fa";
 import AddProject from "./AddProject";
-
+import { MdOutlineHorizontalRule } from "react-icons/md";
+import Footer from "./Footer";
 
 
 const Dashboard = () => {
@@ -85,6 +86,13 @@ const Dashboard = () => {
                   className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
                 >
                   Reviews
+                </Sidebar.Item>
+                <Sidebar.Item
+                  onClick={() => setActiveTab("footer")}
+                  icon={MdOutlineHorizontalRule}
+                  className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
+                >
+                  Footer
                 </Sidebar.Item>
                 <Sidebar.Item
                   className="absolute bottom-0 block hover:bg-[#232F3E]  text-white py-3 px-1"
@@ -318,6 +326,7 @@ const Dashboard = () => {
             {activeTab === "portfolio" && <Portfolio />}
             {activeTab === "reviews" && <Reviews />}
             {activeTab === "addProject" && <AddProject />}
+            {activeTab === "footer" && <Footer />}
           </div>
         </div>
       </div>
