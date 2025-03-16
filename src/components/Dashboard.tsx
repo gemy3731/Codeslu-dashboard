@@ -36,7 +36,7 @@ const Dashboard = () => {
             className="bg-[#232F3E] text-white dashboardNav "
           >
             <Sidebar.Items className="bg-[#232f3e] ">
-              <Sidebar.ItemGroup className="flex flex-col">
+              <Sidebar.ItemGroup className="flex flex-col ml-5">
                 <Sidebar.Item
                   onClick={() => setActiveTab("statistics")}
                   icon={FaChartBar}

@@ -4,6 +4,7 @@ import { Label } from "flowbite-react";
 const AddProject = () => {
     const [fileName, setFileName] = useState('');
 ;    const [category, setCategory] = useState('');
+;    const [message, setMessage] = useState('');
   
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCategory(event.target.value);
@@ -15,7 +16,11 @@ const AddProject = () => {
         }
       };
       const handleScreesChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
+        if (!event?.target?.files || event.target.files.length > 6) {
+          (event.target as HTMLInputElement).value = '';
+          setMessage('You can upload a maximum of 6 screenshots.');
+        }else {
+            setMessage(event.target.files.length + ' files selected');
             const filesArray = Array.from(event.target.files);
             console.log(filesArray)
         }
@@ -29,9 +34,9 @@ const AddProject = () => {
         </h2>
         <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
           <form className="flex flex-col gap-4 dashFrom">
-            <label htmlFor="projectName" className="block">Project Name :</label>
+            <label htmlFor="projectName" className="block">Project Name</label>
             <input type="text" id="projectName" placeholder="Project Name" className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"  />
-            <label htmlFor="projectDescription" className="block">Project Description : </label>
+            <label htmlFor="projectDescription" className="block">Project Description </label>
             <input
               type="text"
               id="projectDescription"
@@ -40,7 +45,7 @@ const AddProject = () => {
             />
             <div className="w-full">
       <div className="mb-2 block">
-        <Label htmlFor="projectCategory" value="Project Category :" />
+        <Label htmlFor="projectCategory" className="text-[16px] font-normal" value="Project Category" />
       </div>
             <select id="projectCategory"  className={category ==''?'placeholder outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]' : "outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"} value={category} onChange={handleCategoryChange}  >
             <option value="" disabled hidden className="text-black" >
@@ -52,19 +57,20 @@ const AddProject = () => {
               <option className="text-black">WEB</option>
             </select>
             </div>
-            <label htmlFor="projectAmount" className="block">Demo Link : </label>
+            <label htmlFor="projectAmount" className="block">Demo Link</label>
             <input type="text" id="projectDemoLink" placeholder="Demo Link" className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"  />
-            <label htmlFor="projectAmount" className="block">Purchase Link : </label>
+            <label htmlFor="projectAmount" className="block">Purchase Link</label>
             <input type="text" id="projectPurchaseLink" placeholder="Purchase Link" className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"  />
-            <label htmlFor="projectImage" className="block">Project Poster : </label>
+            <label htmlFor="projectImage" className="block">Project Poster</label>
             <div className="file-upload">
               <input type="text" value={fileName} className="order-2" readOnly placeholder="Project Image" />
               <input type="file" accept="image/*" id="file-input" onChange={handleFileChange} />
               <label htmlFor="file-input" className="file-button order-1 md:order-3">Choose File</label>
             </div>
-            <div className="flex flex-col gap-3">
-                <label htmlFor="projectScreens" className="block">Project Screens :</label>
-                <input type="file" accept="image/*" id="projectScreens" multiple onChange={handleScreesChange} />
+            <div className="file-input-wrapper flex items-baseline gap-3">
+                <label htmlFor="projectScreens" className="custom-file-label block">Project Screens</label>
+                <input type="file" accept="image/*" id="projectScreens" multiple onChange={handleScreesChange} className=" " />
+                {message === 'You can upload a maximum of 6 screenshots.' ? <p className="text-red-500 mt-4">{message}</p>:<p className="text-black mt-4">{message}</p>}
             </div>
             <button className='bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto'>Add Project</button>
           </form>
