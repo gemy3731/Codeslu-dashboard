@@ -134,7 +134,7 @@ const Reviews = () => {
                   onClick={() => setOpenModal(false)}
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
-                  <IoAddCircleSharp className="text-[18px]" /> Add Review
+                  <IoAddCircleSharp className="text-[18px]"/> Add Review
                 </button>
               </form>
             </div>
