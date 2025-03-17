@@ -21,6 +21,7 @@ import AddProject from "./AddProject";
 import { MdOutlineHorizontalRule } from "react-icons/md";
 import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
+import AddMember from "./AddMember";
 
 
 const Dashboard = () => {
@@ -98,6 +99,13 @@ const Dashboard = () => {
                   className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
                 >
                   Footer
+                </Sidebar.Item>
+                <Sidebar.Item
+                  onClick={() => setActiveTab("addMember")}
+                  icon={FaPlus}
+                  className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
+                >
+                  Add Member
                 </Sidebar.Item>
                 <Sidebar.Item
                   className="absolute bottom-0 block hover:bg-[#232F3E]  text-white py-3 px-1"
@@ -332,6 +340,7 @@ const Dashboard = () => {
             {activeTab === "reviews" && <Reviews />}
             {activeTab === "addProject" && <AddProject />}
             {activeTab === "footer" && <Footer />}
+            {activeTab === "addMember" && <AddMember />}
           </div>
         </div>
       </div>
