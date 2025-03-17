@@ -5,6 +5,7 @@ import Layout from "./components/Layout";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ForgotPassword from "./components/ForgotPassword";
+import NotFound from "./components/NotFound";
 
 const routes = createBrowserRouter([
   {path:'/',element:<Layout/>,children:[
@@ -13,7 +14,8 @@ const routes = createBrowserRouter([
     {path:'/login',element:<Login/>},
     {path:'/signup',element:<Signup/>},
     {path:'/forgotpassword',element:<ForgotPassword/>},
-  ]}
+  ]},
+  {path:'*',element:<NotFound/>},
 ])
 function App() {
   return (
