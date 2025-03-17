@@ -20,11 +20,16 @@ import { FaBars } from "react-icons/fa";
 import AddProject from "./AddProject";
 import { MdOutlineHorizontalRule } from "react-icons/md";
 import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
 
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('statistics');
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const navigate = useNavigate()
+    const signOut = () => {
+      navigate("/login");
+    }
     return <>
     <div className="grid grid-cols-1 lg:grid-cols-[20%_80%] h-screen">
         {/* Left hand side*/}
@@ -100,7 +105,7 @@ const Dashboard = () => {
                   <div className="flex flex-col gap-2 items-center ">
                   <h3 className="text-[18px] font-bold">Welcome, Mustafa</h3>
                   <h4 className="text-[14px] text-[#7C7C7C] uppercase">Admin</h4>
-                  <button className="bg-gray-700 text-white px-3 py-1 rounded-lg w-[100%]">Sign Out</button>
+                  <button onClick={signOut} className="bg-gray-700 text-white px-3 py-1 rounded-lg w-[100%]">Sign Out</button>
                   </div>
                 </Sidebar.Item>
               </Sidebar.ItemGroup>
