@@ -29,7 +29,7 @@ const AddProject = () => {
     <>
 
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
-        <h2 className="text-[24px] font-[400] leading-[29.05px] mb-[26px]">
+        <h2 className="text-[32px] font-[400] leading-[29.05px] mb-[26px] text-center">
           Add New Project
         </h2>
         <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
