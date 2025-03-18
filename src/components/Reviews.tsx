@@ -6,7 +6,7 @@ interface ItemType {
   name: string;
   role: string;
   desc: string;
-  rating: number;
+  rating: number|string;
 }
 const list = [
   {
@@ -63,15 +63,34 @@ const list = [
 const Reviews = () => {
   const [reviews, setReviews] = useState<ItemType[]>(list);
   const [openModal, setOpenModal] = useState(false);
-
+  const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   function onCloseModal() {
     setOpenModal(false);
+    setEditedItem(null);
   }
-
+  const handleBtn = () => {
+    setOpenModal(false);
+    setEditedItem(null);
+  }
   const handleDelete = (e: number) => {
     console.log(e);
     setReviews(reviews.filter((review) => review.id !== e));
   };
+
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!editedItem) return;
+    if(e.target.id==="reviews-name"){
+      setEditedItem({ ...editedItem, name: e.target.value });
+    }else if(e.target.id&&e.target.id==="reviews-Description"){
+      setEditedItem({ ...editedItem, desc: e.target.value });
+    }else if(e.target.id&&e.target.id==="reviews-role"){
+      setEditedItem({ ...editedItem, role: e.target.value });
+    }else if(e.target.id&&e.target.id==="reviews-rating"){
+      setEditedItem({ ...editedItem, rating: e.target.value });
+    }
+  };
+
+
   return (
     <>
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
@@ -90,7 +109,7 @@ const Reviews = () => {
           <Modal.Body className="bg-[#edeeee]">
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] bg-white">
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
-                Add New Review
+                {editedItem ? "Edit Review" : "Add Review"}
               </h3>
               <form className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="reviews-Description" className="block">
@@ -98,6 +117,8 @@ const Reviews = () => {
                 </label>
                 <textarea
                   id="reviews-Description"
+                  value={editedItem?.desc}
+                  onChange={handleChange}
                   placeholder="Reviews Description"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -107,6 +128,8 @@ const Reviews = () => {
                 <input
                   type="text"
                   id="reviews-name"
+                  value={editedItem?.name}
+                  onChange={handleChange}
                   placeholder="Name"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -116,6 +139,8 @@ const Reviews = () => {
                 <input
                   type="text"
                   id="reviews-role"
+                  value={editedItem?.role}
+                  onChange={handleChange}
                   placeholder="Role"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -125,16 +150,18 @@ const Reviews = () => {
                 <input
                   type="number"
                   id="reviews-rating"
+                  value={editedItem?.rating}
+                  onChange={handleChange}
                   placeholder="Rating"
                   min={0}
                   max={5}
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
                 <button
-                  onClick={() => setOpenModal(false)}
+                  onClick={handleBtn}
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
-                  <IoAddCircleSharp className="text-[18px]"/> Add Review
+                  <IoAddCircleSharp className="text-[18px]"/> {editedItem ? "Edit Review" : "Add Review"}
                 </button>
               </form>
             </div>
@@ -165,6 +192,15 @@ const Reviews = () => {
                     <span className="font-bold text-[16px]">Rating: </span>
                     {review?.rating}
                   </h5>
+                  <button
+                    onClick={() => {
+                      setEditedItem(review);
+                      setOpenModal(true);
+                    }}
+                    className="bg-[#232f3e] text-white px-3 py-1 rounded-lg w-full mt-3"
+                  >
+                    Edit
+                  </button>
                   <button
                     onClick={() => handleDelete(review?.id)}
                     className="bg-[#ff2323] text-white px-3 py-1 rounded-lg w-full mt-3"
