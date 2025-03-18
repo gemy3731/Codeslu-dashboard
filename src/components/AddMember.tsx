@@ -21,7 +21,7 @@ const AddMember = () => {
   const [members, setMembers] = useState<ItemType[]>(list);
   const [openModal, setOpenModal] = useState(false);
   const [role, setRole] = useState("");
-
+const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const handleCategoryChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -29,7 +29,19 @@ const AddMember = () => {
   };
   function onCloseModal() {
     setOpenModal(false);
+    setEditedItem(null);
   }
+  const handleBtn = () => {
+    setOpenModal(false);
+    setEditedItem(null);
+  }
+
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!editedItem) return;
+    if(e.target.id==="email"){
+      setEditedItem({ ...editedItem, email: e.target.value });
+    }
+  };
 
   useEffect(() => {
     console.log(members);
@@ -57,7 +69,7 @@ const AddMember = () => {
           <Modal.Body className="bg-[#edeeee]">
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] bg-white">
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
-                Add New Member
+                {editedItem ? "Edit Member" : "Add Member"}
               </h3>
               <form className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="email" className="block">
@@ -66,6 +78,8 @@ const AddMember = () => {
                 <input
                   type="email"
                   id="email"
+                  onChange={handleChange}
+                  value={editedItem ? editedItem.email : ""}
                   placeholder="Email"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -89,10 +103,10 @@ const AddMember = () => {
                   <option className="text-black">Moderator</option>
                 </select>
                 <button
-                  onClick={() => setOpenModal(false)}
+                  onClick={handleBtn}
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
-                  <IoAddCircleSharp className="text-[18px]" /> Add Member
+                  <IoAddCircleSharp className="text-[18px]" /> {editedItem ? "Edit" : "Add"}
                 </button>
               </form>
             </div>
@@ -124,7 +138,11 @@ const AddMember = () => {
                     {member?.role}
                   </td>
                   <td className="py-4 px-3 text-[14px] ">
-                    <button className="bg-[#232f3e] text-white px-3 py-1 rounded-lg">
+                    <button onClick={()=>{
+                      setEditedItem(member)
+                      setOpenModal(true)
+                    }} 
+                    className="bg-[#232f3e] text-white px-3 py-1 rounded-lg">
                       Edit
                     </button>
                   </td>

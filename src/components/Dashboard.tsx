@@ -8,7 +8,7 @@ import { useState } from "react";
 import { FaDollarSign, FaGlobe } from "react-icons/fa";
 import { ResponsivePie } from "@nivo/pie";
 import { Sidebar } from "flowbite-react";
-import { chartDataTwo } from '../Data/dataTwo';
+import { chartDataTwo } from "../Data/dataTwo";
 import { ResponsiveLine } from "@nivo/line";
 import { chartData } from "../Data/dataOne";
 import MainSlider from "./MainSlider";
@@ -22,22 +22,30 @@ import { MdOutlineHorizontalRule } from "react-icons/md";
 import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
 import AddMember from "./AddMember";
-
-
+import { GrGroup } from "react-icons/gr";
 const Dashboard = () => {
-    const [activeTab, setActiveTab] = useState('statistics');
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const navigate = useNavigate()
-    const signOut = () => {
-      navigate("/login");
-    }
-    return <>
-    <div className="grid grid-cols-1 lg:grid-cols-[20%_80%] h-screen">
+  const [activeTab, setActiveTab] = useState("statistics");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const signOut = () => {
+    navigate("/login");
+  };
+  return (
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-[20%_80%] h-screen">
         {/* Left hand side*/}
-        <FaBars onClick={() => setIsOpen(!isOpen)} className="lg:hidden fixed top-5 left-5 text-3xl text-[#232f3e] z-50 border-2 border-black rounded-full p-1" />
-        
-        <div className={isOpen?" lg:hidden  bg-[#232f3e] overflow-hidden fixed top-0 left-0 z-30 h-screen":"hidden lg:block bg-[#232f3e] overflow-hidden"}>
-         
+        <FaBars
+          onClick={() => setIsOpen(!isOpen)}
+          className="lg:hidden fixed top-5 left-5 text-3xl text-[#232f3e] z-50 border-2 border-black rounded-full p-1"
+        />
+
+        <div
+          className={
+            isOpen
+              ? " lg:hidden  bg-[#232f3e] overflow-hidden fixed top-0 left-0 z-30 h-screen"
+              : "hidden lg:block bg-[#232f3e] overflow-hidden"
+          }
+        >
           <Sidebar
             aria-label="Default sidebar"
             className="bg-[#232F3E] text-white dashboardNav "
@@ -102,32 +110,36 @@ const Dashboard = () => {
                 </Sidebar.Item>
                 <Sidebar.Item
                   onClick={() => setActiveTab("addMember")}
-                  icon={FaPlus}
+                  icon={GrGroup}
                   className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
                 >
-                  Add Member
+                  Members
                 </Sidebar.Item>
-                <Sidebar.Item
-                  className="absolute bottom-0 block hover:bg-[#232F3E]  text-white py-3 px-1"
-                >
+                <Sidebar.Item className="absolute bottom-0 block hover:bg-[#232F3E]  text-white py-3 px-1">
                   <div className="flex flex-col gap-2 items-center ">
-                  <h3 className="text-[18px] font-bold">Welcome, Mustafa</h3>
-                  <h4 className="text-[14px] text-[#7C7C7C] uppercase">Admin</h4>
-                  <button onClick={signOut} className="bg-gray-700 text-white px-3 py-1 rounded-lg w-[100%]">Sign Out</button>
+                    <h3 className="text-[18px] font-bold">Welcome, Mustafa</h3>
+                    <h4 className="text-[14px] text-[#7C7C7C] uppercase">
+                      Admin
+                    </h4>
+                    <button
+                      onClick={signOut}
+                      className="bg-gray-700 text-white px-3 py-1 rounded-lg w-[100%]"
+                    >
+                      Sign Out
+                    </button>
                   </div>
                 </Sidebar.Item>
               </Sidebar.ItemGroup>
             </Sidebar.Items>
           </Sidebar>
-          
         </div>
-  
+
         {/* Right hand side*/}
         <div className=" overflow-auto bg-[#edeeee]">
           <div className="col-span-1 md:col-span-10">
             {/* عرض المحتوى بناءً على التبويب النشط */}
             {activeTab === "statistics" && (
-              <div className='p-6'>
+              <div className="p-6">
                 <div className="container mx-auto">
                   <div className="bg-white p-6 rounded-lg shadow-2xl">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -146,7 +158,7 @@ const Dashboard = () => {
                           </p>
                         </div>
                       </div>
-  
+
                       {/* Sales Info */}
                       <div className="bg-[#E3F2FF] rounded-lg shadow-md p-4">
                         <p className="text-[#232F3E] text-[14px] font-bold mb-2">
@@ -162,7 +174,7 @@ const Dashboard = () => {
                           </p>
                         </div>
                       </div>
-  
+
                       {/* Projects Info */}
                       <div className="bg-[#FFEAE8] rounded-lg shadow-md p-4">
                         <p className="text-[#232F3E] text-[14px] font-bold mb-2">
@@ -178,7 +190,7 @@ const Dashboard = () => {
                           </p>
                         </div>
                       </div>
-  
+
                       {/* Shipments Info */}
                       <div className="bg-[#FFF1CA] rounded-lg shadow-md p-4">
                         <p className="text-[#232F3E] text-[14px] font-bold mb-2">
@@ -194,14 +206,19 @@ const Dashboard = () => {
                           </p>
                         </div>
                       </div>
-  
+
                       {/* Revenue Chart */}
                       <div className="col-span-1 sm:col-span-2 lg:col-span-2 bg-white rounded-lg shadow-md p-4 mt-3">
                         <h1 className="text-[20px] font-bold">Revenue</h1>
                         <div style={{ width: "100%", height: "300px" }}>
                           <ResponsiveLine
                             data={chartData}
-                            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                            margin={{
+                              top: 50,
+                              right: 110,
+                              bottom: 50,
+                              left: 60,
+                            }}
                             xScale={{ type: "point" }}
                             yScale={{
                               type: "linear",
@@ -244,14 +261,19 @@ const Dashboard = () => {
                           />
                         </div>
                       </div>
-  
+
                       {/* Market Share Chart */}
                       <div className="col-span-1 sm:col-span-2 lg:col-span-2 bg-white rounded-lg shadow-md p-4">
                         <h1 className="text-[20px] font-bold">Market Share</h1>
                         <div style={{ width: "100%", height: "500px" }}>
                           <ResponsivePie
                             data={chartDataTwo}
-                            margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+                            margin={{
+                              top: 40,
+                              right: 80,
+                              bottom: 80,
+                              left: 80,
+                            }}
                             innerRadius={0.4}
                             padAngle={0.7}
                             cornerRadius={5}
@@ -331,7 +353,7 @@ const Dashboard = () => {
                 </div>
               </div>
             )}
-  
+
             {/* Display content for other tabs */}
             {activeTab === "mainSlider" && <MainSlider />}
             {activeTab === "blog" && <Blog />}
@@ -344,7 +366,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </>;
-}
+    </>
+  );
+};
 
-export default Dashboard
+export default Dashboard;
