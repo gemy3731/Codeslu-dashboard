@@ -3,8 +3,8 @@ import { Label } from "flowbite-react";
 
 const AddProject = () => {
     const [fileName, setFileName] = useState('');
-;    const [category, setCategory] = useState('');
-;    const [message, setMessage] = useState('');
+    const [category, setCategory] = useState('');
+    const [message, setMessage] = useState('');
   
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCategory(event.target.value);
