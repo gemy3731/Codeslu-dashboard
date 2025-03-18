@@ -52,17 +52,34 @@ const MainSlider = () => {
   const [fileName, setFileName] = useState("");
   const [imgs, setImgs] = useState<ItemType[]>(images);
   const [openModal, setOpenModal] = useState(false);
+  const [editedItem, setEditedItem] = useState<ItemType | null>(null);
+  // const [openEditModal, setOpenEditModal] = useState<boolean>(false);
 
   function onCloseModal() {
     setOpenModal(false);
+    setEditedItem(null);
   }
+
+const handleBtn = () => {
+  setOpenModal(false);
+  setEditedItem(null);
+}
 
   const handleDelete = (e: number) => {
     console.log(e);
     setImgs(imgs.filter((img) => img.id !== e));
   };
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!editedItem) return;
+    if(e.target.id==="slide-name"){
+      setEditedItem({ ...editedItem, name: e.target.value });
+    }else if(e.target.id&&e.target.id==="slide-Description"){
+      setEditedItem({ ...editedItem, desc: e.target.value });
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     if (event.target.files) {
       const selectedFile = event.target.files[0];
       setFileName(selectedFile ? selectedFile.name : "");
@@ -75,7 +92,7 @@ const MainSlider = () => {
         <h2 className="text-[32px] text-center font-[400] leading-[29.05px] mb-[26px]">
           Main Slider
         </h2>
-
+        {/* ADD NEW SLIDE OR EDIT SLIDE*/}
         <Modal
           show={openModal}
           size="6xl"
@@ -87,7 +104,7 @@ const MainSlider = () => {
           <Modal.Body className="bg-[#edeeee]">
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] bg-white">
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
-                Add New Slide
+                {editedItem ? "Edit Slide" : "Add New Slide"}
               </h3>
               <form className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="slide-Description" className="block">
@@ -95,6 +112,8 @@ const MainSlider = () => {
                 </label>
                 <textarea
                   id="slide-Description"
+                  value={editedItem?.desc || ""}
+                  onChange={handleChange}
                   placeholder="Slide Description"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -104,6 +123,8 @@ const MainSlider = () => {
                 <input
                   type="text"
                   id="slide-name"
+                  value={editedItem?.name || ""}
+                  onChange={handleChange}
                   placeholder="Slide Name"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -113,7 +134,7 @@ const MainSlider = () => {
                 <div className="file-upload">
                   <input
                     type="text"
-                    value={fileName}
+                    value={fileName||editedItem?.url}
                     className="order-2"
                     readOnly
                     placeholder="Slide Image"
@@ -132,15 +153,16 @@ const MainSlider = () => {
                   </label>
                 </div>
                 <button
-                  onClick={() => setOpenModal(false)}
+                  onClick={handleBtn}
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
-                  <IoAddCircleSharp className="text-[18px]" /> Add Slide
+                  <IoAddCircleSharp className="text-[18px]" /> {editedItem ? "Edit Slide" : "Add Slide"}
                 </button>
               </form>
             </div>
           </Modal.Body>
         </Modal>
+
 
         <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] mt-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -163,8 +185,17 @@ const MainSlider = () => {
                       {img?.name}
                     </h5>
                     <button
+                      onClick={() => {
+                        setEditedItem(img);
+                        setOpenModal(true);
+                      }}
+                      className="bg-[#232f3e] text-white px-3 py-1 rounded-lg w-full mt-3"
+                    >
+                      Edit
+                    </button>
+                    <button
                       onClick={() => handleDelete(img?.id)}
-                      className="bg-[#ff2323] text-white px-3 py-1 rounded-lg w-full mt-3"
+                      className="bg-[#ff2323] text-white px-3 py-1 rounded-lg w-full mt-1"
                     >
                       Delete
                     </button>
