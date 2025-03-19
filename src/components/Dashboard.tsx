@@ -23,6 +23,10 @@ import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
 import AddMember from "./AddMember";
 import { GrGroup } from "react-icons/gr";
+import { FaExchangeAlt } from "react-icons/fa";
+import ChangePass from "./ChangePass";
+
+
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("statistics");
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -114,6 +118,13 @@ const Dashboard = () => {
                   className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
                 >
                   Members
+                </Sidebar.Item>
+                <Sidebar.Item
+                  onClick={() => setActiveTab("changePass")}
+                  icon={FaExchangeAlt}
+                  className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
+                >
+                  Change Password
                 </Sidebar.Item>
                 <Sidebar.Item className="absolute bottom-0 block hover:bg-[#232F3E]  text-white py-3 px-1">
                   <div className="flex flex-col gap-2 items-center ">
@@ -363,6 +374,7 @@ const Dashboard = () => {
             {activeTab === "addProject" && <AddProject />}
             {activeTab === "footer" && <Footer />}
             {activeTab === "addMember" && <AddMember />}
+            {activeTab === "changePass" && <ChangePass/>}
           </div>
         </div>
       </div>
