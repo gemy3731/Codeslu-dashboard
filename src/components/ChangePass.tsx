@@ -9,7 +9,14 @@ const ChangePass = () => {
                 <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
                   <form className="flex flex-col gap-4 dashFrom">
                     <label htmlFor="email" className="block">Email</label>
-                    <input type="email" id="email" placeholder="Project Name" className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"  />
+                    <input type="email" id="email" placeholder="Email" className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"  />
+                    <label htmlFor="oldPass" className="block">Old Password</label>
+                    <input
+                      type="text"
+                      id="oldPass"
+                      placeholder="Old Password"
+                      className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+                    />
                     <label htmlFor="newPass" className="block">New Password</label>
                     <input
                       type="text"

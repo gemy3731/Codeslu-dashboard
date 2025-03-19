@@ -148,14 +148,13 @@ const Dashboard = () => {
         {/* Right hand side*/}
         <div className=" overflow-auto bg-[#edeeee]">
           <div className="col-span-1 md:col-span-10">
-            {/* عرض المحتوى بناءً على التبويب النشط */}
             {activeTab === "statistics" && (
               <div className="p-6">
                 <div className="container mx-auto">
                   <div className="bg-white p-6 rounded-lg shadow-2xl">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                       {/* Visitor Info */}
-                      <div className="bg-[#E7F3CC] rounded-lg shadow-md p-4">
+                      <div className="bg-[#1abc9c] rounded-lg shadow-md p-4">
                         <p className="text-[#232F3E] text-[14px] font-bold mb-2">
                           Number of visitors
                         </p>
@@ -171,7 +170,7 @@ const Dashboard = () => {
                       </div>
 
                       {/* Sales Info */}
-                      <div className="bg-[#E3F2FF] rounded-lg shadow-md p-4">
+                      <div className="bg-[#2ecc71] rounded-lg shadow-md p-4">
                         <p className="text-[#232F3E] text-[14px] font-bold mb-2">
                           New Sales
                         </p>
@@ -187,7 +186,7 @@ const Dashboard = () => {
                       </div>
 
                       {/* Projects Info */}
-                      <div className="bg-[#FFEAE8] rounded-lg shadow-md p-4">
+                      <div className="bg-[#f39c12] rounded-lg shadow-md p-4">
                         <p className="text-[#232F3E] text-[14px] font-bold mb-2">
                           All Projects
                         </p>
@@ -203,7 +202,7 @@ const Dashboard = () => {
                       </div>
 
                       {/* Shipments Info */}
-                      <div className="bg-[#FFF1CA] rounded-lg shadow-md p-4">
+                      <div className="bg-[#e67e22] rounded-lg shadow-md p-4">
                         <p className="text-[#232F3E] text-[14px] font-bold mb-2">
                           Number of Shipments
                         </p>
@@ -285,6 +284,7 @@ const Dashboard = () => {
                               bottom: 80,
                               left: 80,
                             }}
+                            colors={{ datum: 'data.color' }}
                             innerRadius={0.4}
                             padAngle={0.7}
                             cornerRadius={5}
@@ -325,11 +325,10 @@ const Dashboard = () => {
                               },
                             ]}
                             fill={[
-                              { match: { id: "ruby" }, id: "dots" },
-                              { match: { id: "javascript" }, id: "dots" },
-                              { match: { id: "hack" }, id: "dots" },
-                              { match: { id: "python" }, id: "dots" },
-                              { match: { id: "php" }, id: "dots" },
+                              { match: { id: "IOS" }, id: "dots" },
+                              { match: { id: "ANDROID" }, id: "dots" },
+                              { match: { id: "WEB" }, id: "dots" },
+                              { match: { id: "GAMES" }, id: "dots" },
                             ]}
                             legends={[
                               {
