@@ -6,16 +6,17 @@ interface ItemType {
   id: number;
   email: string;
   role: string;
+  status:string
 }
 const list = [
-  { id: 1, email: "Mohamed@yahoo", role: "admin" },
-  { id: 2, email: "Osama@yahoo", role: "moderator" },
-  { id: 3, email: "Mustafa@yahoo", role: "moderator" },
-  { id: 4, email: "Ahmed@yahoo", role: "moderator" },
-  { id: 5, email: "Tarek@yahoo", role: "moderator" },
-  { id: 6, email: "ali@yahoo", role: "admin" },
-  { id: 7, email: "omar@yahoo", role: "admin" },
-  { id: 8, email: "amr@yahoo", role: "admin" },
+  { id: 1, email: "Mohamed@yahoo",status:'pending', role: "admin" },
+  { id: 2, email: "Osama@yahoo",status:'accepted', role: "moderator" },
+  { id: 3, email: "Mustafa@yahoo",status:'pending', role: "moderator" },
+  { id: 4, email: "Ahmed@yahoo",status:'pending', role: "moderator" },
+  { id: 5, email: "Tarek@yahoo",status:'pending', role: "moderator" },
+  { id: 6, email: "ali@yahoo",status:'pending', role: "admin" },
+  { id: 7, email: "omar@yahoo",status:'pending', role: "admin" },
+  { id: 8, email: "amr@yahoo",status:'pending', role: "admin" },
 ];
 const AddMember = () => {
   const [members, setMembers] = useState<ItemType[]>(list);
@@ -121,6 +122,7 @@ const [editedItem, setEditedItem] = useState<ItemType | null>(null);
                 <th className="py-3 px-6 text-[12px]">No</th>
                 <th className="py-3 px-6 text-[12px]">Email</th>
                 <th className="py-3 px-6 text-[12px]">Role</th>
+                <th className="py-3 px-6 text-[12px]">Status</th>
                 <th className="py-3 px-6 text-[12px]">Edit</th>
                 <th className="py-3 px-6 text-[12px]">Delete</th>
               </tr>
@@ -136,6 +138,9 @@ const [editedItem, setEditedItem] = useState<ItemType | null>(null);
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
                     {member?.role}
+                  </td>
+                  <td className="py-4 px-6 text-[14px] text-[#272525]">
+                    {member?.status}
                   </td>
                   <td className="py-4 px-3 text-[14px] ">
                     <button onClick={()=>{
