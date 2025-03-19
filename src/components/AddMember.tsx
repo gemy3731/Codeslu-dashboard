@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
-import { Modal } from "flowbite-react";
+import { Badge, Modal } from "flowbite-react";
 import { IoAddCircleSharp } from "react-icons/io5";
 interface ItemType {
   id: number;
@@ -140,7 +140,7 @@ const [editedItem, setEditedItem] = useState<ItemType | null>(null);
                     {member?.role}
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
-                    {member?.status}
+                  <Badge className="w-fit p-2 rounded-xl" color={member?.status=="pending"?"warning":"success"}>{member?.status}</Badge>
                   </td>
                   <td className="py-4 px-3 text-[14px] ">
                     <button onClick={()=>{
