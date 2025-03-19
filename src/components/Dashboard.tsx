@@ -126,7 +126,7 @@ const Dashboard = () => {
                 >
                   Change Password
                 </Sidebar.Item>
-                <Sidebar.Item className="absolute bottom-0 block hover:bg-[#232F3E]  text-white py-3 px-1">
+                <Sidebar.Item className="absolute bottom-0 block hover:bg-[#232F3E] text-white py-1 px-1">
                   <div className="flex flex-col gap-2 items-center ">
                     <h3 className="text-[18px] font-bold">Welcome, Mustafa</h3>
                     <h4 className="text-[14px] text-[#7C7C7C] uppercase">
