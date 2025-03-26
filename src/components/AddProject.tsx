@@ -22,7 +22,7 @@ const AddProject = () => {
     onSubmit: (values) => {
       console.log(values);
       const formData = new FormData();
-      formData.append("projectNamev", values.projectName);
+      formData.append("projectName", values.projectName);
       formData.append("projectDesc", values.projectDesc);
       formData.append("ProjectCat", values.ProjectCat);
       formData.append("demoLink", values.demoLink);

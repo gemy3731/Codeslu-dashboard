@@ -5,6 +5,7 @@ import { IoPlanetSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { Label, Modal } from "flowbite-react";
+import { useFormik } from "formik";
 
 interface ItemType {
   id: number;
@@ -38,6 +39,35 @@ const Portfolio = () => {
   const [message, setMessage] = useState('');
   // const [openEditModal, setOpenEditModal] = useState<boolean>(false);
 
+const formik = useFormik({
+    initialValues: {
+      projectName: editedItem?.name || "",
+      projectDesc: editedItem?.desc || "",
+      ProjectCat: editedItem?.name || "",
+      demoLink: editedItem?.demoLink || "",
+      purchaseLink: editedItem?.purchaseLink || "",
+      projectPoster: null,
+      screens: null,
+    },
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      console.log(values);
+      const formData = new FormData();
+      formData.append("projectName", values.projectName);
+      formData.append("projectDesc", values.projectDesc);
+      formData.append("ProjectCat", values.ProjectCat);
+      formData.append("demoLink", values.demoLink);
+      formData.append("purchaseLink", values.purchaseLink);
+      if (values.projectPoster) {
+        formData.append("projectPoster", values.projectPoster);
+      }
+      if (values.screens) {
+        formData.append("screens", values.screens);
+      }
+      handleBtn();
+    },
+  });
+
 
 const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
   if (event.target.files) {
@@ -66,12 +96,16 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     if (!editedItem) return;
     if (e.target.id === "projectName") {
       setEditedItem({ ...editedItem, name: e.target.value });
+      formik.setFieldValue("projectName", e.target.value);
     } else if (e.target.id && e.target.id === "projectDescription") {
       setEditedItem({ ...editedItem, desc: e.target.value });
+      formik.setFieldValue("projectDesc", e.target.value);
     }else if (e.target.id && e.target.id === "projectDemoLink") {
       setEditedItem({ ...editedItem, demoLink: e.target.value });
+      formik.setFieldValue("demoLink", e.target.value);
     }else if (e.target.id && e.target.id === "projectPurchaseLink") {
       setEditedItem({ ...editedItem, purchaseLink: e.target.value });
+      formik.setFieldValue("purchaseLink", e.target.value);
     }
   };
   const handleScreesChange = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -108,13 +142,14 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
               Add New Project
             </h2>
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
-              <form className="flex flex-col gap-4 dashFrom">
+              <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="projectName" className="block">
                   Project Name
                 </label>
                 <input
                   type="text"
                   id="projectName"
+                  name="projectName"
                   value={editedItem?.name}
                   onChange={handleChange}
                   placeholder="Project Name"
@@ -126,6 +161,7 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
                 <input
                   type="text"
                   id="projectDescription"
+                  name="projectDesc"
                   value={editedItem?.desc}
                   onChange={handleChange}
                   placeholder="Project Description"
@@ -146,6 +182,7 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
                 <input
                   type="text"
                   id="projectDemoLink"
+                  name="demoLink"
                   value={editedItem?.demoLink}
                   onChange={handleChange}
                   placeholder="Demo Link"
@@ -157,12 +194,13 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
                 <input
                   type="text"
                   id="projectPurchaseLink"
+                  name="purchaseLink"
                   value={editedItem?.purchaseLink}
                   onChange={handleChange}
                   placeholder="Purchase Link"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
-                <label htmlFor="projectImage" className="block">
+                <label htmlFor="file-input" className="block">
                   Project Poster
                 </label>
                 <div className="file-upload">
@@ -175,6 +213,7 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
                   />
                   <input
                     type="file"
+                    name="projectPoster"
                     accept="image/*"
                     id="file-input"
                     onChange={handleFileChange}
@@ -195,6 +234,7 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
                   </label>
                   <input
                     type="file"
+                    name="projectScreens"
                     accept="image/*"
                     id="projectScreens"
                     multiple
@@ -207,7 +247,7 @@ const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
                     <p className="text-black mt-4">{message}</p>
                   )}
                 </div>
-                <button onClick={handleBtn} className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto">
+                <button  type="submit" className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto">
                   Edit Project
                 </button>
               </form>
