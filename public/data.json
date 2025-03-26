@@ -1,0 +1,97 @@
+{
+    "slider": [
+      {
+        "description": "string",
+        "name": "string",
+        "image": "string",
+        "order": "integer"
+      }
+    ],
+    "about_us": {
+      "description": "string",
+      "left_card_upper_text": "string",
+      "left_card_lower_text": "string",
+      "right_card_upper_text": "string",
+      "right_card_lower_text": "string",
+      "left_card_image": "string|null",
+      "right_card_image": "string|null"
+    },
+    "statistics": {
+      "number_of_visitors": "integer",
+      "total_clients": "integer",
+      "completed_projects": "integer",
+      "years_of_experience": "integer",
+      "team_members": "integer"
+    },
+    "category_counts": {
+      "ios": "integer",
+      "android": "integer",
+      "games": "integer",
+      "web": "integer"
+    },
+    "projects": [
+      {
+        "order": "integer",
+        "name": "string",
+        "description": "string",
+        "poster": "string",
+        "screens": ["string"],
+        "category": "string",
+        "demo_link": "string|null",
+        "purchase_link": "string|null"
+      }
+    ],
+    "blog": [
+      {
+        "order": "integer",
+        "name": "string",
+        "description": "string",
+        "title": "string",
+        "date": "string",
+        "image": "string",
+        "subject":"string"
+      }
+    ],
+    "reviews": [
+      {
+        "order": "integer",
+        "role": "string",
+        "name": "string",
+        "description": "string",
+        "rating": "integer"
+      }
+    ],
+    "footer": {
+      "social_media": [
+        {
+        "order": "integer",
+          "name": "string",
+          "url": "string",
+          "image": "string"
+        }
+      ],
+      "email": "string",
+      "phone": "string",
+      "based_in": "string",
+      "all_rights": "string"
+    },
+    "members":[
+      {
+        "email": "string",
+        "role": "string",
+        "status": "string"
+      }
+    ],
+    "change_password":{
+      "old_password": "string",
+      "new_password": "string"
+    },
+    "login":{
+      "email": "string",
+      "password": "string"
+    },
+    "forgot_password":{
+      "email": "string"
+    }
+  }
+  
