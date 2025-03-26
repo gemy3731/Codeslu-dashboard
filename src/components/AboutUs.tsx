@@ -15,10 +15,10 @@ const AboutUs = () => {
   const [fileNameLeft, setFileNameLeft] = useState("");
 
   useEffect(() => {
-    setData();
+    getData();
   }, []);
 
-  const setData = async () => {
+  const getData = async () => {
     const res = await fetch("/data.json");
     const data = await res.json();
     setAboutUs( data.about_us);
@@ -143,7 +143,7 @@ const AboutUs = () => {
               value={formik.values.lowerTextRightCard}
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
             />
-            <label htmlFor="Lower-text-in-right-card" className="block">
+            <label htmlFor="file-input-right" className="block">
               Image in right card
             </label>
             <div className="file-upload">
@@ -168,7 +168,7 @@ const AboutUs = () => {
                 Choose File
               </label>
             </div>
-            <label htmlFor="Lower-text-in-right-card" className="block">
+            <label htmlFor="file-input-left" className="block">
               Image in left card
             </label>
             <div className="file-upload">

@@ -86,6 +86,8 @@ const handleBtn = () => {
     }
   };
 
+  
+
   return (
     <>
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
