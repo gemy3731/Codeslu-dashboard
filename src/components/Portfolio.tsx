@@ -355,19 +355,22 @@ const Portfolio = () => {
                 <th className="py-3 px-6 text-[12px]">Delete</th>
               </tr>
             </thead>
-            <ReactSortable tag="tbody" list={projects} setList={(newList) => {
-          // Update the order property after sorting
-          const updatedList = newList.map((item, index) => ({
-            ...item,
-            order: index + 1, // Assign new order
-          }));
-          setProjects(updatedList);
-        }}>
+            <ReactSortable
+              tag="tbody"
+              list={projects}
+              setList={(newList) => {
+
+                const updatedList = newList.map((item, index) => ({
+                  ...item,
+                  order: index + 1, 
+                }));
+                setProjects(updatedList);
+              }}
+            >
               {projects.map((project, i) => (
                 <tr key={project?.id}>
                   <td className="py-4 px-6 text-[14px] text-[#272525] font-medium">
                     {i + 1}
-                    
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
                     {project?.name}

@@ -2,28 +2,159 @@ import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { Modal } from "flowbite-react";
 import { IoAddCircleSharp } from "react-icons/io5";
+import { useFormik } from "formik";
 interface ItemType {
   id: number;
   name: string;
   date: string;
+  order: number;
+  desc: string;
+  title: string;
+  subject: string;
 }
 const list = [
-  { id: 1, name: "Mohamed", date: "MARCH 1, 2023" },
-  { id: 2, name: "Osama", date: "MARCH 1, 2023" },
-  { id: 3, name: "Mustafa", date: "MARCH 1, 2023" },
-  { id: 4, name: "Ahmed", date: "MARCH 1, 2023" },
-  { id: 5, name: "Tarek", date: "MARCH 1, 2023" },
-  { id: 6, name: "ali", date: "MARCH 1, 2023" },
-  { id: 7, name: "omar", date: "MARCH 1, 2023" },
-  { id: 8, name: "amr", date: "MARCH 1, 2023" },
+  {
+    id: 1,
+    order: 1,
+    title: "Blog Title",
+    name: "Mohamed",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
+  {
+    id: 2,
+    order: 2,
+    title: "Blog Title",
+    name: "Osama",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
+  {
+    id: 3,
+    order: 3,
+    title: "Blog Title",
+    name: "Mustafa",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
+  {
+    id: 4,
+    order: 4,
+    name: "Ahmed",
+    title: "Blog Title",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
+  {
+    id: 5,
+    order: 5,
+    title: "Blog Title",
+    name: "Tarek",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
+  {
+    id: 6,
+    order: 6,
+    title: "Blog Title",
+    name: "ali",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
+  {
+    id: 7,
+    order: 7,
+    title: "Blog Title",
+    name: "omar",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
+  {
+    id: 8,
+    order: 8,
+    title: "Blog Title",
+    name: "amr",
+    date: "MARCH 1, 2023",
+    subject: "Blog Subject",
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+  },
 ];
 
 const Blog = () => {
   const [blogs, setBlogs] = useState<ItemType[]>(list);
+  const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [fileName, setFileName] = useState("");
-  function onCloseModal() {
+
+const formik = useFormik({
+    initialValues: {
+      blogTitle: editedItem?.title || "",
+      blogDesc: editedItem?.desc || "",
+      name: editedItem?.name || "",
+      date: editedItem?.date || "",
+      subject: editedItem?.subject || "",
+      image: null,
+    },
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      console.log(values);
+      const formData = new FormData();
+      formData.append("blogTitle", values.blogTitle);
+      formData.append("blogDesc", values.blogDesc);
+      formData.append("name", values.name);
+      formData.append("date", values.date);
+      formData.append("subject", values.subject);
+      // formData.append("order", values.order.toString());
+      if (values.image) {
+        formData.append("image", values.image);
+      }
+
+      handleBtn();
+    },
+  });
+
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (!editedItem) return;
+    if (e.target.id === "blog-title") {
+      setEditedItem({ ...editedItem, title: e.target.value });
+      formik.setFieldValue("blogTitle", e.target.value);
+    } else if (e.target.id && e.target.id === "blog-description") {
+      setEditedItem({ ...editedItem, desc: e.target.value });
+      formik.setFieldValue("blogDesc", e.target.value);
+    } else if (e.target.id && e.target.id === "name") {
+      setEditedItem({ ...editedItem, name: e.target.value });
+      formik.setFieldValue("name", e.target.value);
+    } else if (e.target.id && e.target.id === "subject") {
+      setEditedItem({ ...editedItem, subject: e.target.value });
+      formik.setFieldValue("subject", e.target.value);
+    } else if (e.target.id && e.target.id === "date") {
+      setEditedItem({ ...editedItem, date: e.target.value });
+      formik.setFieldValue("date", e.target.value);
+    }
+  };
+
+  const handleBtn = () => {
     setOpenModal(false);
+    setEditedItem(null);
+  };
+
+  function onCloseModal() {
+    setEditedItem(null);
+    setOpenModal(false);
+  }
+  function onEdit(values: ItemType) {
+    setOpenModal(true);
+    setEditedItem(values);
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,15 +189,18 @@ const Blog = () => {
           <Modal.Body className="bg-[#edeeee]">
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] bg-white">
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
-                Add New Blog
+                {editedItem ? "Edit Blog" : "Add New Blog"}
               </h3>
-              <form className="flex flex-col gap-4 dashFrom">
+              <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="blog-title" className="block">
                   Blog Title
                 </label>
                 <input
                   type="text"
                   id="blog-title"
+                  name="blogTitle"
+                  value={editedItem?.title}
+                  onChange={handleChange}
                   placeholder="Blog Title"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -75,6 +209,9 @@ const Blog = () => {
                 </label>
                 <textarea
                   id="blog-description"
+                  name="blogDesc"
+                  value={editedItem?.desc}
+                  onChange={handleChange}
                   placeholder="Blog Description"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -84,16 +221,22 @@ const Blog = () => {
                 <input
                   type="text"
                   id="name"
+                  name="name"
+                  value={editedItem?.name}
+                  onChange={handleChange}
                   placeholder="Name"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
-                <label htmlFor="name" className="block">
+                <label htmlFor="date" className="block">
                   Date
                 </label>
                 <input
                   type="date"
-                  id="name"
-                  placeholder="Name"
+                  id="date"
+                  name="date"
+                  value={editedItem?.date}
+                  onChange={handleChange}
+                  placeholder="date"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
                 <label htmlFor="subject" className="block">
@@ -102,6 +245,9 @@ const Blog = () => {
                 <input
                   type="text"
                   id="subject"
+                  name="subject"
+                  value={editedItem?.subject}
+                  onChange={handleChange}
                   placeholder="Subject"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -121,6 +267,7 @@ const Blog = () => {
                     type="file"
                     accept="image/*"
                     id="file-input"
+                    name="image"
                     onChange={handleFileChange}
                   />
                   <label
@@ -134,7 +281,7 @@ const Blog = () => {
                   onClick={() => setOpenModal(false)}
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
-                  <IoAddCircleSharp className="text-[18px]" /> Add Blog
+                  <IoAddCircleSharp className="text-[18px]" /> {editedItem ? "Edit" : "Add"} Blog
                 </button>
               </form>
             </div>
@@ -155,17 +302,27 @@ const Blog = () => {
                 <th className="py-3 px-6 text-[12px]">Delete</th>
               </tr>
             </thead>
-            <ReactSortable tag="tbody" list={blogs} setList={setBlogs}>
+            <ReactSortable
+              tag="tbody"
+              list={blogs}
+              setList={(newList) => {
+                const updatedList = newList.map((item, index) => ({
+                  ...item,
+                  order: index + 1,
+                }));
+                setBlogs(updatedList);
+              }}
+            >
               {blogs.map((blog, i) => (
                 <tr key={blog?.id}>
                   <td className="py-4 px-6 text-[14px] text-[#272525] font-medium">
                     {i + 1}
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
-                    {blog?.name}
+                    {blog?.title.split(" ").slice(0, 4).join(" ")}...
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
-                    Description for Project {blog?.id}.
+                    {blog?.desc.split(" ").slice(0, 4).join(" ")}...
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
                     {blog?.name}
@@ -174,7 +331,12 @@ const Blog = () => {
                     {blog?.date}
                   </td>
                   <td className="py-4 px-3 text-[14px] ">
-                    <button className="bg-[#232f3e] text-white px-3 py-1 rounded-lg">
+                    <button
+                      onClick={() => {
+                        onEdit(blog);
+                      }}
+                      className="bg-[#232f3e] text-white px-3 py-1 rounded-lg"
+                    >
                       Edit
                     </button>
                   </td>
