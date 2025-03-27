@@ -1,55 +1,109 @@
 import { Modal } from "flowbite-react";
+import { useFormik } from "formik";
 import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 
-interface Isocial{
-  id:number;
-  title:string;
-  url:string
+interface Isocial {
+  id: number;
+  title: string;
+  url: string;
+}
+interface Ifooter {
+  email: string;
+  phone: string;
+  basedIn: string;
+  allRights: string;
 }
 
 const social = [
-  {id:1,title:"Facebook",url:"https://facebook.com/"},
-  {id:2,title:"whatsapp",url:"https://whatsapp.com/"},
-  {id:3,title:"LinnkedIn",url:"https://LinnkedIn.com/"},
-]
+  { id: 1, title: "Facebook", url: "https://facebook.com/" },
+  { id: 2, title: "whatsapp", url: "https://whatsapp.com/" },
+  { id: 3, title: "LinnkedIn", url: "https://LinnkedIn.com/" },
+];
+const footerData = {
+  email:'mohamedgamalz3731@gmail.com',
+  phone:'+201204811102',
+  basedIn:  'BASED IN HANOI, VIETNAM',
+  allRights: '© 2024 ALL RIGHTS RESERVED'
+}
 
 const Footer = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openSocialModal, setOpenSocialModal] = useState(false);
   const [socials, setSocials] = useState<Isocial[]>(social);
-const [editedItem, setEditedItem] = useState<Isocial | null>(null);
-  //  const [editedItem, setEditedItem] = useState<ItemType | null>(null);
+  const [editedItem, setEditedItem] = useState<Isocial | null>(null);
+  const [fData,setFData ] = useState<Ifooter | null>(footerData);
+
+const footerFormik = useFormik({
+  initialValues: {
+    email: fData?.email || "",
+    phone: fData?.phone || "",
+    basedIn: fData?.basedIn || "",
+    allRights: fData?.allRights || "",
+  },
+  enableReinitialize: true,
+  onSubmit: (values) => {
+    console.log(values);
+    onCloseModal()
+  },
+})
+const socialFormik = useFormik({
+  initialValues: {
+    title: editedItem?.title || "",
+    url: editedItem?.url || "",
+  },
+  enableReinitialize: true,
+  onSubmit: (values) => {
+    console.log(values);
+    handleBtn()
+  },
+})
+
+// const handleFooterBtn = () => {
+//   setOpenSocialModal(false);
+// };
 
   function onCloseModal() {
     setOpenModal(false);
     setOpenSocialModal(false);
-     setEditedItem(null);
+    setEditedItem(null);
   }
-  function onOpenModal(e:React.MouseEvent<HTMLButtonElement>) {
+  function onOpenModal(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setOpenModal(true);
   }
   const handleBtn = () => {
     setOpenSocialModal(false);
-     setEditedItem(null);
+    setEditedItem(null);
   };
   const handleDelete = (e: number) => {
     console.log(e);
     setSocials(socials.filter((social) => social.id !== e));
   };
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    if (!editedItem) return;
-    if(e.target.id==="title"){
-      setEditedItem({ ...editedItem, title: e.target.value });
-    }else if(e.target.id==="social-url"){
-      setEditedItem({ ...editedItem, url: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // if (!editedItem) return;
+    if (e.target.id === "title") {
+      setEditedItem({ ...editedItem!, title: e.target.value });
+    } else if (e.target.id === "social-url") {
+      setEditedItem({ ...editedItem!, url: e.target.value });
+    }
+  };
+  const onChangeFooter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // if (!editedItem) return;
+    if (e.target.id === "email") {
+      setFData({ ...fData!, email: e.target.value });
+    } else if (e.target.id === "phone") {
+      setFData({ ...fData!, phone: e.target.value });
+    } else if (e.target.id === "based-in") {
+      setFData({ ...fData!, basedIn: e.target.value });
+    } else if (e.target.id === "all-rights") {
+      setFData({ ...fData!, allRights: e.target.value });
     }
   };
   return (
     <>
-
+    {/* footer modal */}
       <Modal
         show={openModal}
         size="6xl"
@@ -64,13 +118,16 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
               Footer
             </h2>
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
-              <form className="flex flex-col gap-4 dashFrom">
+              <form onSubmit={footerFormik.handleSubmit} className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="email" className="block">
                   Email
                 </label>
                 <input
                   type="email"
                   id="email"
+                  name="email"
+                  value={fData?.email}
+                  onChange={onChangeFooter}
                   placeholder="Email"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -80,6 +137,9 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
                 <input
                   type="tel"
                   id="phone"
+                  name="phone"
+                  value={fData?.phone}
+                  onChange={onChangeFooter}
                   placeholder="Phone"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -89,6 +149,9 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
                 <input
                   type="text"
                   id="based-in"
+                  name="basedIn"
+                  value={fData?.basedIn}
+                  onChange={onChangeFooter}
                   placeholder="Based In"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
@@ -98,11 +161,14 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
                 <input
                   type="text"
                   id="all-rights"
+                  name="allRights"
+                  value={fData?.allRights}
+                  onChange={onChangeFooter}
                   placeholder="All Rights"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
                 <button
-                  onClick={onOpenModal}
+                  type="submit"
                   className="bg-[#FF9900] mt-4 flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
                   Edit Footer
@@ -113,9 +179,8 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
         </Modal.Body>
       </Modal>
 
-
-{/* socail modal */}
-<Modal
+      {/* socail modal */}
+      <Modal
         show={openSocialModal}
         size="6xl"
         onClose={onCloseModal}
@@ -129,13 +194,14 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
               Socail
             </h2>
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
-              <form className="flex flex-col gap-4 dashFrom">
+              <form onSubmit={socialFormik.handleSubmit} className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="title" className="block">
                   Title
                 </label>
                 <input
                   type="text"
                   id="title"
+                  name="title"
                   value={editedItem?.title}
                   onChange={handleChange}
                   placeholder="Title"
@@ -147,13 +213,14 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
                 <input
                   type="text"
                   id="social-url"
+                  name="url"
                   value={editedItem?.url}
                   onChange={handleChange}
                   placeholder="URL"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
                 <button
-                  onClick={handleBtn}
+                  type="submit"
                   className="bg-[#FF9900] mt-4 flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
                   Edit Social
@@ -164,12 +231,10 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
         </Modal.Body>
       </Modal>
 
-
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
         <h2 className="text-[32px] text-center font-[400] leading-[29.05px] mb-[26px]">
           Footer
         </h2>
-
 
         <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
           <div className="overflow-x-auto py-6 ">
@@ -219,14 +284,12 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
               </ReactSortable>
             </table>
             <button
-              onClick={()=>setOpenSocialModal(true)}
+              onClick={() => setOpenSocialModal(true)}
               className="bg-[#FF9900] mt-4 flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
             >
               Add Social
             </button>
           </div>
-
-
 
           <form className="flex flex-col gap-4 dashFrom">
             <label htmlFor="email" className="block">
@@ -235,7 +298,7 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
             <input
               type="email"
               id="email"
-              value={"mohamedgamalz3731@gmail.com"}
+              value={fData?.email}
               disabled
               placeholder="Email"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -246,7 +309,7 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
             <input
               type="tel"
               id="phone"
-              value={"+201204811102"}
+              value={fData?.phone}
               disabled
               placeholder="Phone"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -257,7 +320,7 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
             <input
               type="text"
               id="based-in"
-              value={"BASED IN HANOI, VIETNAM"}
+              value={fData?.basedIn}
               disabled
               placeholder="Based In"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -268,7 +331,7 @@ const [editedItem, setEditedItem] = useState<Isocial | null>(null);
             <input
               type="text"
               id="all-rights"
-              value={"© 2024 ALL RIGHTS RESERVED"}
+              value={fData?.allRights}
               disabled
               placeholder="All Rights"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
