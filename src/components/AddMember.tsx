@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { Badge, Modal } from "flowbite-react";
 import { IoAddCircleSharp } from "react-icons/io5";
+import { useFormik } from "formik";
 interface ItemType {
   id: number;
   email: string;
@@ -21,26 +22,42 @@ const list = [
 const AddMember = () => {
   const [members, setMembers] = useState<ItemType[]>(list);
   const [openModal, setOpenModal] = useState(false);
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState<string>("");
 const [editedItem, setEditedItem] = useState<ItemType | null>(null);
+
+const formik = useFormik({
+  initialValues: {
+    email: editedItem?.email || "",
+    role: "",
+  },
+  enableReinitialize: true,
+  onSubmit: (values) => {
+    console.log(values);
+    handleBtn();
+  },
+})
+
   const handleCategoryChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setRole(event.target.value);
+    // setEditedItem({ ...editedItem!, role: event.target.value });
+    formik.setFieldValue("role", event.target.value);
   };
   function onCloseModal() {
     setOpenModal(false);
     setEditedItem(null);
   }
   const handleBtn = () => {
-    setOpenModal(false);
     setEditedItem(null);
+    setRole('');
+    setOpenModal(false);
   }
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (!editedItem) return;
+    // if (!editedItem) return;
     if(e.target.id==="email"){
-      setEditedItem({ ...editedItem, email: e.target.value });
+      setEditedItem({ ...editedItem!, email: e.target.value });
     }
   };
 
@@ -72,13 +89,15 @@ const [editedItem, setEditedItem] = useState<ItemType | null>(null);
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
                 {editedItem ? "Edit Member" : "Add Member"}
               </h3>
-              <form className="flex flex-col gap-4 dashFrom">
+              <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="email" className="block">
                   Email
                 </label>
                 <input
                   type="email"
                   id="email"
+                  name="email"
+                  onBlur={formik.handleBlur}
                   onChange={handleChange}
                   value={editedItem ? editedItem.email : ""}
                   placeholder="Email"
@@ -104,7 +123,7 @@ const [editedItem, setEditedItem] = useState<ItemType | null>(null);
                   <option className="text-black">Moderator</option>
                 </select>
                 <button
-                  onClick={handleBtn}
+                  type="submit"
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
                   <IoAddCircleSharp className="text-[18px]" /> {editedItem ? "Edit" : "Add"}
