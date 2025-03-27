@@ -124,21 +124,21 @@ const formik = useFormik({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    if (!editedItem) return;
+    // if (!editedItem) return;
     if (e.target.id === "blog-title") {
-      setEditedItem({ ...editedItem, title: e.target.value });
+      setEditedItem({ ...editedItem!, title: e.target.value });
       formik.setFieldValue("blogTitle", e.target.value);
     } else if (e.target.id && e.target.id === "blog-description") {
-      setEditedItem({ ...editedItem, desc: e.target.value });
+      setEditedItem({ ...editedItem!, desc: e.target.value });
       formik.setFieldValue("blogDesc", e.target.value);
     } else if (e.target.id && e.target.id === "name") {
-      setEditedItem({ ...editedItem, name: e.target.value });
+      setEditedItem({ ...editedItem!, name: e.target.value });
       formik.setFieldValue("name", e.target.value);
     } else if (e.target.id && e.target.id === "subject") {
-      setEditedItem({ ...editedItem, subject: e.target.value });
+      setEditedItem({ ...editedItem!, subject: e.target.value });
       formik.setFieldValue("subject", e.target.value);
     } else if (e.target.id && e.target.id === "date") {
-      setEditedItem({ ...editedItem, date: e.target.value });
+      setEditedItem({ ...editedItem!, date: e.target.value });
       formik.setFieldValue("date", e.target.value);
     }
   };
@@ -278,7 +278,7 @@ const formik = useFormik({
                   </label>
                 </div>
                 <button
-                  onClick={() => setOpenModal(false)}
+                  type="submit"
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
                   <IoAddCircleSharp className="text-[18px]" /> {editedItem ? "Edit" : "Add"} Blog

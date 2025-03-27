@@ -1,4 +1,5 @@
 import { Modal } from "flowbite-react";
+import { useFormik } from "formik";
 import { useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 interface ItemType {
@@ -64,6 +65,23 @@ const Reviews = () => {
   const [reviews, setReviews] = useState<ItemType[]>(list);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
+
+const formik = useFormik({
+    initialValues: {
+      name: editedItem?.name || "",
+      role: editedItem?.role || "",
+      desc: editedItem?.desc || "",
+      rating: editedItem?.rating || "",
+    },
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      console.log(values);
+      handleBtn();
+    },
+  });
+
+
+
   function onCloseModal() {
     setOpenModal(false);
     setEditedItem(null);
@@ -78,15 +96,19 @@ const Reviews = () => {
   };
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (!editedItem) return;
+    // if (!editedItem) return;
     if(e.target.id==="reviews-name"){
-      setEditedItem({ ...editedItem, name: e.target.value });
+      setEditedItem({ ...editedItem!, name: e.target.value });
+      formik.setFieldValue("name", e.target.value);
     }else if(e.target.id&&e.target.id==="reviews-Description"){
-      setEditedItem({ ...editedItem, desc: e.target.value });
+      setEditedItem({ ...editedItem!, desc: e.target.value });
+      formik.setFieldValue("desc", e.target.value);
     }else if(e.target.id&&e.target.id==="reviews-role"){
-      setEditedItem({ ...editedItem, role: e.target.value });
+      setEditedItem({ ...editedItem!, role: e.target.value });
+      formik.setFieldValue("role", e.target.value);
     }else if(e.target.id&&e.target.id==="reviews-rating"){
-      setEditedItem({ ...editedItem, rating: e.target.value });
+      setEditedItem({ ...editedItem!, rating: e.target.value });
+      formik.setFieldValue("rating", e.target.value);
     }
   };
 
@@ -111,12 +133,13 @@ const Reviews = () => {
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
                 {editedItem ? "Edit Review" : "Add Review"}
               </h3>
-              <form className="flex flex-col gap-4 dashFrom">
+              <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="reviews-Description" className="block">
                   Reviews Description
                 </label>
                 <textarea
                   id="reviews-Description"
+                  name="desc"
                   value={editedItem?.desc}
                   onChange={handleChange}
                   placeholder="Reviews Description"
@@ -128,6 +151,7 @@ const Reviews = () => {
                 <input
                   type="text"
                   id="reviews-name"
+                  name="name"
                   value={editedItem?.name}
                   onChange={handleChange}
                   placeholder="Name"
@@ -139,6 +163,7 @@ const Reviews = () => {
                 <input
                   type="text"
                   id="reviews-role"
+                  name="role"
                   value={editedItem?.role}
                   onChange={handleChange}
                   placeholder="Role"
@@ -150,6 +175,7 @@ const Reviews = () => {
                 <input
                   type="number"
                   id="reviews-rating"
+                  name="rating"
                   value={editedItem?.rating}
                   onChange={handleChange}
                   placeholder="Rating"
@@ -158,7 +184,7 @@ const Reviews = () => {
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
                 <button
-                  onClick={handleBtn}
+                  type="submit"
                   className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
                 >
                   <IoAddCircleSharp className="text-[18px]"/> {editedItem ? "Edit Review" : "Add Review"}
