@@ -56,7 +56,8 @@ const MainSlider = () => {
   const [imgs, setImgs] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
-  // const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+
+
   const formik = useFormik({
     initialValues: {
       name: editedItem?.name || "",
@@ -94,7 +95,7 @@ const MainSlider = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        // setImgs([...blogs, data]);
+        setImgs([...imgs, data]);
         handleBtn();
       })
       .catch((error) => {
@@ -129,10 +130,10 @@ const MainSlider = () => {
   ) => {
     // if (!editedItem) return;
     if (e.target.id === "slide-name") {
-      setEditedItem({ ...editedItem, name: e.target.value });
+      // setEditedItem({ ...editedItem, name: e.target.value });
       formik.setFieldValue("name", e.target.value);
     } else if (e.target.id && e.target.id === "slideDescription") {
-      setEditedItem({ ...editedItem, description: e.target.value });
+      // setEditedItem({ ...editedItem, description: e.target.value });
       formik.setFieldValue("description", e.target.value);
     }
   };
