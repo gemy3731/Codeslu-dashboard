@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Label } from "flowbite-react";
 import { useFormik } from "formik";
 
+const apiUrl = import.meta.env.VITE_API_URL;
 const AddProject = () => {
   // const [projects, setProjects] = useState(null);
   const [fileName, setFileName] = useState("");
@@ -20,19 +21,20 @@ const AddProject = () => {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       const formData = new FormData();
-      formData.append("projectName", values.projectName);
-      formData.append("projectDesc", values.projectDesc);
-      formData.append("ProjectCat", values.ProjectCat);
-      formData.append("demoLink", values.demoLink);
-      formData.append("purchaseLink", values.purchaseLink);
+      formData.append("name", values.projectName);
+      formData.append("description", values.projectDesc);
+      formData.append("category", values.ProjectCat);
+      formData.append("demo_link", values.demoLink);
+      formData.append("purchase_link", values.purchaseLink);
       if (values.projectPoster) {
-        formData.append("projectPoster", values.projectPoster);
+        formData.append("poster", values.projectPoster);
       }
       if (values.screens) {
         formData.append("screens", values.screens);
       }
+      addNewProject(formData);
     },
   });
 
@@ -58,6 +60,36 @@ const AddProject = () => {
       console.log(filesArray);
     }
   };
+  function addNewProject(formData: FormData) {
+    const jsonData = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      category: formData.get("category").toLowerCase(),
+      demo_link: formData.get("demo_link"),
+      purchase_link: formData.get("purchase_link"),
+      poster: formData.get("poster"),
+      screens: formData.get("screens"),
+    };
+  
+    fetch(`${apiUrl}/api/projects`, {
+      method: "POST",
+      body: JSON.stringify(jsonData),
+      headers: {
+        "Content-Type": "application/json"
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        // setBlogs([...blogs, data]);
+        // handleBtn();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+  
+
   return (
     <>
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
