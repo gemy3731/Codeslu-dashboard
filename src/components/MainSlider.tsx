@@ -130,10 +130,10 @@ const MainSlider = () => {
   ) => {
     // if (!editedItem) return;
     if (e.target.id === "slide-name") {
-      // setEditedItem({ ...editedItem, name: e.target.value });
+      setEditedItem({ ...editedItem!, name: e.target.value });
       formik.setFieldValue("name", e.target.value);
     } else if (e.target.id && e.target.id === "slideDescription") {
-      // setEditedItem({ ...editedItem, description: e.target.value });
+      setEditedItem({ ...editedItem!, description: e.target.value });
       formik.setFieldValue("description", e.target.value);
     }
   };

@@ -1,68 +1,18 @@
 import { Modal } from "flowbite-react";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
+const apiUrl = import.meta.env.VITE_API_URL;
 interface ItemType {
-  id: number;
+  _id?: string;
   name: string;
   role: string;
-  desc: string;
+  description: string;
   rating: number|string;
 }
-const list = [
-  {
-    id: 1,
-    name: "Mohamed",
-    role: "user",
-    desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-    rating: 5,
-  },
-  {
-    id: 2,
-    name: "ali",
-    role: "user",
-    desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: "omar",
-    role: "user",
-    desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-    rating: 5,
-  },
-  {
-    id: 4,
-    name: "ahmed",
-    role: "user",
-    desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-    rating: 5,
-  },
-  {
-    id: 5,
-    name: "osama",
-    role: "user",
-    desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-    rating: 5,
-  },
-  {
-    id: 6,
-    name: "yehia",
-    role: "user",
-    desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-    rating: 5,
-  },
-  {
-    id: 7,
-    name: "yasser",
-    role: "user",
-    desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-    rating: 5,
-  },
-];
 
 const Reviews = () => {
-  const [reviews, setReviews] = useState<ItemType[]>(list);
+  const [reviews, setReviews] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
 
@@ -70,12 +20,13 @@ const formik = useFormik({
     initialValues: {
       name: editedItem?.name || "",
       role: editedItem?.role || "",
-      desc: editedItem?.desc || "",
+      description: editedItem?.description || "",
       rating: editedItem?.rating || "",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
       console.log(values);
+      addReview(values);
       handleBtn();
     },
   });
@@ -90,9 +41,29 @@ const formik = useFormik({
     setOpenModal(false);
     setEditedItem(null);
   }
-  const handleDelete = (e: number) => {
-    console.log(e);
-    setReviews(reviews.filter((review) => review.id !== e));
+
+  const getReviews = async () => {
+    // console.log("getBlogs")
+    const res = await fetch(`${apiUrl}/api/reviews`);
+    const data = await res.json();
+    // console.log(data)
+    setReviews(data);
+  }
+  useEffect(() => {
+    getReviews();
+  }, []);
+  const handleDelete = (id: string) => {
+    fetch(`${apiUrl}/api/reviews/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setReviews(reviews.filter((review) => review._id !== id));
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -101,7 +72,7 @@ const formik = useFormik({
       setEditedItem({ ...editedItem!, name: e.target.value });
       formik.setFieldValue("name", e.target.value);
     }else if(e.target.id&&e.target.id==="reviews-Description"){
-      setEditedItem({ ...editedItem!, desc: e.target.value });
+      setEditedItem({ ...editedItem!, description: e.target.value });
       formik.setFieldValue("desc", e.target.value);
     }else if(e.target.id&&e.target.id==="reviews-role"){
       setEditedItem({ ...editedItem!, role: e.target.value });
@@ -111,8 +82,25 @@ const formik = useFormik({
       formik.setFieldValue("rating", e.target.value);
     }
   };
-
-
+  function addReview(values: ItemType) {
+    
+  
+    fetch(`${apiUrl}/api/reviews`, {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-Type": "application/json"
+      },
+    }).then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      setReviews([...reviews, data]);
+      handleBtn();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  }
   return (
     <>
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
@@ -140,7 +128,7 @@ const formik = useFormik({
                 <textarea
                   id="reviews-Description"
                   name="desc"
-                  value={editedItem?.desc}
+                  value={editedItem?.description}
                   onChange={handleChange}
                   placeholder="Reviews Description"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -199,12 +187,12 @@ const formik = useFormik({
             {reviews.map((review) => {
               return (
                 <div
-                  key={review.id}
+                  key={review._id}
                   className="border rounded-[8px] p-5 text-[14px] flex flex-col gap-2"
                 >
                   <p>
                     <span className="font-bold text-[16px]">Description: </span>
-                    {review?.desc}
+                    {review?.description}
                   </p>
                   <h5>
                     <span className="font-bold text-[16px]">Name: </span>
@@ -228,7 +216,7 @@ const formik = useFormik({
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(review?.id)}
+                    onClick={() => handleDelete(review?._id ?? "")}
                     className="bg-[#ff2323] text-white px-3 py-1 rounded-lg w-full mt-3"
                   >
                     Delete
