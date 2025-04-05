@@ -4,99 +4,100 @@ import { Modal } from "flowbite-react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useFormik } from "formik";
 interface ItemType {
-  id: number;
+  _id: string;
   name: string;
   date: string;
   order: number;
-  desc: string;
+  description: string;
   title: string;
   subject: string;
 }
-const list = [
-  {
-    id: 1,
-    order: 1,
-    title: "Blog Title",
-    name: "Mohamed",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-  {
-    id: 2,
-    order: 2,
-    title: "Blog Title",
-    name: "Osama",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-  {
-    id: 3,
-    order: 3,
-    title: "Blog Title",
-    name: "Mustafa",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-  {
-    id: 4,
-    order: 4,
-    name: "Ahmed",
-    title: "Blog Title",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-  {
-    id: 5,
-    order: 5,
-    title: "Blog Title",
-    name: "Tarek",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-  {
-    id: 6,
-    order: 6,
-    title: "Blog Title",
-    name: "ali",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-  {
-    id: 7,
-    order: 7,
-    title: "Blog Title",
-    name: "omar",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-  {
-    id: 8,
-    order: 8,
-    title: "Blog Title",
-    name: "amr",
-    date: "MARCH 1, 2023",
-    subject: "Blog Subject",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-  },
-];
-
+// const list = [
+//   {
+//     id: 1,
+//     order: 1,
+//     title: "Blog Title",
+//     name: "Mohamed",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+//   {
+//     id: 2,
+//     order: 2,
+//     title: "Blog Title",
+//     name: "Osama",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+//   {
+//     id: 3,
+//     order: 3,
+//     title: "Blog Title",
+//     name: "Mustafa",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+//   {
+//     id: 4,
+//     order: 4,
+//     name: "Ahmed",
+//     title: "Blog Title",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+//   {
+//     id: 5,
+//     order: 5,
+//     title: "Blog Title",
+//     name: "Tarek",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+//   {
+//     id: 6,
+//     order: 6,
+//     title: "Blog Title",
+//     name: "ali",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+//   {
+//     id: 7,
+//     order: 7,
+//     title: "Blog Title",
+//     name: "omar",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+//   {
+//     id: 8,
+//     order: 8,
+//     title: "Blog Title",
+//     name: "amr",
+//     date: "MARCH 1, 2023",
+//     subject: "Blog Subject",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//   },
+// ];
+const apiUrl = import.meta.env.VITE_API_URL;
 const Blog = () => {
-  const [blogs, setBlogs] = useState<ItemType[]>(list);
+  const [blogs, setBlogs] = useState<ItemType[]>([]);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [fileName, setFileName] = useState("");
 
+
 const formik = useFormik({
     initialValues: {
       blogTitle: editedItem?.title || "",
-      blogDesc: editedItem?.desc || "",
+      blogDesc: editedItem?.description || "",
       name: editedItem?.name || "",
       date: editedItem?.date || "",
       subject: editedItem?.subject || "",
@@ -104,10 +105,10 @@ const formik = useFormik({
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       const formData = new FormData();
-      formData.append("blogTitle", values.blogTitle);
-      formData.append("blogDesc", values.blogDesc);
+      formData.append("title", values.blogTitle);
+      formData.append("description", values.blogDesc);
       formData.append("name", values.name);
       formData.append("date", values.date);
       formData.append("subject", values.subject);
@@ -115,7 +116,10 @@ const formik = useFormik({
       if (values.image) {
         formData.append("image", values.image);
       }
-
+      // for (const pair of formData.entries()) {
+      //   console.log(`${pair[0]}: ${pair[1]}`);   
+      // }
+      addBlog(formData);
       handleBtn();
     },
   });
@@ -129,7 +133,7 @@ const formik = useFormik({
       setEditedItem({ ...editedItem!, title: e.target.value });
       formik.setFieldValue("blogTitle", e.target.value);
     } else if (e.target.id && e.target.id === "blog-description") {
-      setEditedItem({ ...editedItem!, desc: e.target.value });
+      setEditedItem({ ...editedItem!, description: e.target.value });
       formik.setFieldValue("blogDesc", e.target.value);
     } else if (e.target.id && e.target.id === "name") {
       setEditedItem({ ...editedItem!, name: e.target.value });
@@ -163,14 +167,62 @@ const formik = useFormik({
       setFileName(selectedFile ? selectedFile.name : "");
     }
   };
-
-  useEffect(() => {
-    console.log(blogs);
-  }, [blogs]);
-  const handleDelete = (e: number) => {
-    console.log(e);
-    setBlogs(blogs.filter((blog) => blog.id !== e));
+const getBlogs = async () => {
+  // console.log("getBlogs")
+  const res = await fetch(`${apiUrl}/api/blog`);
+  const data = await res.json();
+  // console.log(data)
+  setBlogs(data);
+}
+ function addBlog(formData: FormData) {
+  const jsonData = {
+    title: formData.get("title"),
+    description: formData.get("description"),
+    name: formData.get("name"),
+    date: formData.get("date")==''?null:formData.get("date"),
+    subject: formData.get("subject"),
+    image: formData.get("image")
   };
+
+  fetch(`${apiUrl}/api/blog`, {
+    method: "POST",
+    body: JSON.stringify(jsonData),
+    headers: {
+      "Content-Type": "application/json"
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      setBlogs([...blogs, data]);
+      handleBtn();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+function deleteBlog(id: string) {
+  fetch(`${apiUrl}/api/blog/${id}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      setBlogs(blogs.filter((blog) => blog._id !== id));
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+  // useEffect(() => {
+  //   console.log(blogs);
+  // }, [blogs]);
+  useEffect(() => {
+    getBlogs()
+  }, []);
+  // const handleDelete = (e: string) => {
+  //   setBlogs(blogs.filter((blog) => blog._id !== e));
+  // };
   return (
     <>
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[50px] py-[54px] ">
@@ -210,7 +262,7 @@ const formik = useFormik({
                 <textarea
                   id="blog-description"
                   name="blogDesc"
-                  value={editedItem?.desc}
+                  value={editedItem?.description}
                   onChange={handleChange}
                   placeholder="Blog Description"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -289,6 +341,8 @@ const formik = useFormik({
         </Modal>
 
         {/* Blog Table */}
+        {blogs.length === 0 ? <h2 className="text-[32px] text-center font-[400] leading-[29.05px] mb-[26px]">No blog found</h2>:(
+
         <div className="overflow-x-auto py-6 ">
           <table className="min-w-full bg-white border-b border-t border-b-gray-300 overflow-hidden">
             <thead className="border-b">
@@ -304,25 +358,26 @@ const formik = useFormik({
             </thead>
             <ReactSortable
               tag="tbody"
-              list={blogs}
+              list={blogs.map(blog => ({ ...blog, id: blog._id }))}
               setList={(newList) => {
                 const updatedList = newList.map((item, index) => ({
                   ...item,
+                  _id: item.id,
                   order: index + 1,
                 }));
                 setBlogs(updatedList);
               }}
             >
               {blogs.map((blog, i) => (
-                <tr key={blog?.id}>
+                <tr key={blog?._id}>
                   <td className="py-4 px-6 text-[14px] text-[#272525] font-medium">
                     {i + 1}
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
-                    {blog?.title.split(" ").slice(0, 4).join(" ")}...
+                    {blog?.title?.split(" ").slice(0, 4).join(" ")}...
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
-                    {blog?.desc.split(" ").slice(0, 4).join(" ")}...
+                    {blog?.description?.split(" ").slice(0, 4).join(" ")}...
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
                     {blog?.name}
@@ -342,7 +397,7 @@ const formik = useFormik({
                   </td>
                   <td className="py-4 px-3 text-[14px]">
                     <button
-                      onClick={() => handleDelete(blog?.id)}
+                      onClick={() => deleteBlog(blog._id)}
                       className="bg-[#ff2323] text-white px-3 py-1 rounded-lg"
                     >
                       Delete
@@ -353,6 +408,7 @@ const formik = useFormik({
             </ReactSortable>
           </table>
         </div>
+        )}
         <button
           onClick={() => setOpenModal(true)}
           className="bg-[#FF9900] mt-4 flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"

@@ -40,7 +40,7 @@ const Dashboard = () => {
         {/* Left hand side*/}
         <FaBars
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden fixed top-5 left-5 text-3xl text-[#232f3e] z-50 border-2 border-black rounded-full p-1"
+          className={`lg:hidden fixed top-5 left-5 text-3xl text-[#232f3e] z-50 border-2 border-black rounded-full p-1 ${isOpen ? " text-white translate-x-[200px] border-white" : ""}`}
         />
 
         <div
