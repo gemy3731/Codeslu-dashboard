@@ -64,7 +64,7 @@ const AddProject = () => {
     const jsonData = {
       name: formData.get("name"),
       description: formData.get("description"),
-      category: formData.get("category").toLowerCase(),
+      category: typeof formData.get("category") === "string" && formData.get("category") ? (formData.get("category") as string).toLowerCase() : "",
       demo_link: formData.get("demo_link"),
       purchase_link: formData.get("purchase_link"),
       poster: formData.get("poster"),
@@ -150,7 +150,7 @@ const AddProject = () => {
                 </option>
                 <option className="text-black">IOS</option>
                 <option className="text-black">ANDROID</option>
-                <option className="text-black">GAME</option>
+                <option className="text-black">GAMES</option>
                 <option className="text-black">WEB</option>
               </select>
             </div>

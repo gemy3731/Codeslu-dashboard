@@ -5,6 +5,7 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { useFormik } from "formik";
 interface ItemType {
   _id: string;
+  id: string;
   name: string;
   date: string;
   order: number;
@@ -358,11 +359,10 @@ function deleteBlog(id: string) {
             </thead>
             <ReactSortable
               tag="tbody"
-              list={blogs.map(blog => ({ ...blog, id: blog._id }))}
+              list={blogs}
               setList={(newList) => {
                 const updatedList = newList.map((item, index) => ({
                   ...item,
-                  _id: item.id,
                   order: index + 1,
                 }));
                 setBlogs(updatedList);

@@ -8,81 +8,82 @@ import { Label, Modal } from "flowbite-react";
 import { useFormik } from "formik";
 
 interface ItemType {
-  id: number;
+  _id: string;
+  id: string;
   name: string;
-  desc: string;
-  demoLink: string;
-  purchaseLink: string;
+  description: string;
+  demo_link: string;
+  purchase_link: string;
   order: number;
-  projectPoster?: string;
+  poster?: string;
   screens?: string[];
 }
-const list = [
-  {
-    id: 1,
-    order: 1,
-    name: "Mohamed",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-  {
-    id: 2,
-    order: 2,
-    name: "Osama",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-  {
-    id: 3,
-    order: 3,
-    name: "Mustafa",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-  {
-    id: 4,
-    order: 4,
-    name: "Ahmed",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-  {
-    id: 5,
-    order: 5,
-    name: "Tarek",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-  {
-    id: 6,
-    order: 6,
-    name: "ali",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-  {
-    id: 7,
-    order: 7,
-    name: "omar",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-  {
-    id: 8,
-    order: 8,
-    name: "amr",
-    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-    demoLink: "https://google.com",
-    purchaseLink: "https://google.com",
-  },
-];
+// const list = [
+//   {
+//     id: 1,
+//     order: 1,
+//     name: "Mohamed",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+//   {
+//     id: 2,
+//     order: 2,
+//     name: "Osama",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+//   {
+//     id: 3,
+//     order: 3,
+//     name: "Mustafa",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+//   {
+//     id: 4,
+//     order: 4,
+//     name: "Ahmed",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+//   {
+//     id: 5,
+//     order: 5,
+//     name: "Tarek",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+//   {
+//     id: 6,
+//     order: 6,
+//     name: "ali",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+//   {
+//     id: 7,
+//     order: 7,
+//     name: "omar",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+//   {
+//     id: 8,
+//     order: 8,
+//     name: "amr",
+//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
+//     demoLink: "https://google.com",
+//     purchaseLink: "https://google.com",
+//   },
+// ];
 
 const projectType = [
   { name: "IOS", icon: <ImAppleinc />, number: 15 },
@@ -90,21 +91,25 @@ const projectType = [
   { name: "GAMES", icon: <FaGamepad />, number: 5 },
   { name: "WEB", icon: <IoPlanetSharp />, number: 1 },
 ];
+const apiUrl = import.meta.env.VITE_API_URL;
 const Portfolio = () => {
-  const [projects, setProjects] = useState<ItemType[]>(list);
+  const [projects, setProjects] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const [fileName, setFileName] = useState("");
   const [message, setMessage] = useState("");
   // const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-
+  function handleBtn(){
+    setOpenModal(false);
+    setEditedItem(null);
+  };
   const formik = useFormik({
     initialValues: {
       projectName: editedItem?.name || "",
-      projectDesc: editedItem?.desc || "",
+      projectDesc: editedItem?.description || "",
       ProjectCat: editedItem?.name || "",
-      demoLink: editedItem?.demoLink || "",
-      purchaseLink: editedItem?.purchaseLink || "",
+      demoLink: editedItem?.demo_link || "",
+      purchaseLink: editedItem?.purchase_link || "",
       projectPoster: null,
       screens: null,
       // order: editedItem?.order || 0,
@@ -113,21 +118,33 @@ const Portfolio = () => {
     onSubmit: (values) => {
       console.log(values);
       const formData = new FormData();
-      formData.append("projectName", values.projectName);
-      formData.append("projectDesc", values.projectDesc);
-      formData.append("ProjectCat", values.ProjectCat);
-      formData.append("demoLink", values.demoLink);
-      formData.append("purchaseLink", values.purchaseLink);
+      formData.append("name", values.projectName);
+      formData.append("description", values.projectDesc);
+      formData.append("category", values.ProjectCat);
+      formData.append("demo_link", values.demoLink);
+      formData.append("purchase_link", values.purchaseLink);
       // formData.append("order", values.order.toString());
       if (values.projectPoster) {
-        formData.append("projectPoster", values.projectPoster);
+        formData.append("poster", values.projectPoster);
       }
       if (values.screens) {
         formData.append("screens", values.screens);
       }
+      // updateProject(formData);
       handleBtn();
     },
   });
+
+  // function updateProject(formData: FormData) {
+  //   const jsonData = {
+  //     name: formData.get("name"),
+  //     description: formData.get("description"),
+  //     category: typeof formData.get("category") === "string" && formData.get("category") ? (formData.get("category") as string).toLowerCase() : "",
+  //     demo_link: formData.get("demo_link"),
+  //     purchase_link: formData.get("purchase_link"),
+  //     poster: formData.get("poster"),
+  //     screens: formData.get("screens"),
+  //   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -145,10 +162,7 @@ const Portfolio = () => {
     setEditedItem(values);
   }
 
-  const handleBtn = () => {
-    setOpenModal(false);
-    setEditedItem(null);
-  };
+  
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -158,13 +172,13 @@ const Portfolio = () => {
       setEditedItem({ ...editedItem, name: e.target.value });
       formik.setFieldValue("projectName", e.target.value);
     } else if (e.target.id && e.target.id === "projectDescription") {
-      setEditedItem({ ...editedItem, desc: e.target.value });
+      setEditedItem({ ...editedItem, description: e.target.value });
       formik.setFieldValue("projectDesc", e.target.value);
     } else if (e.target.id && e.target.id === "projectDemoLink") {
-      setEditedItem({ ...editedItem, demoLink: e.target.value });
+      setEditedItem({ ...editedItem, demo_link: e.target.value });
       formik.setFieldValue("demoLink", e.target.value);
     } else if (e.target.id && e.target.id === "projectPurchaseLink") {
-      setEditedItem({ ...editedItem, purchaseLink: e.target.value });
+      setEditedItem({ ...editedItem, purchase_link: e.target.value });
       formik.setFieldValue("purchaseLink", e.target.value);
     }
   };
@@ -178,14 +192,33 @@ const Portfolio = () => {
       console.log(filesArray);
     }
   };
+  const getProjects = async () => {
+    // console.log("getBlogs")
+    const res = await fetch(`${apiUrl}/api/projects`);
+    const data = await res.json();
+    // console.log(data)
+    setProjects(data);
+  }
 
   useEffect(() => {
     console.log(projects);
   }, [projects]);
-  const handleDelete = (e: number) => {
-    console.log(e);
-    setProjects(projects.filter((item) => item.id !== e));
-  };
+  useEffect(() => {
+    getProjects();
+  }, []);
+  function deleteProject(id: string) {
+    fetch(`${apiUrl}/api/projects/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setProjects(projects.filter((project) => project._id !== id));
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
   return (
     <div>
       <Modal
@@ -225,7 +258,7 @@ const Portfolio = () => {
                   type="text"
                   id="projectDescription"
                   name="projectDesc"
-                  value={editedItem?.desc}
+                  value={editedItem?.description}
                   onChange={handleChange}
                   placeholder="Project Description"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -246,7 +279,7 @@ const Portfolio = () => {
                   type="text"
                   id="projectDemoLink"
                   name="demoLink"
-                  value={editedItem?.demoLink}
+                  value={editedItem?.demo_link}
                   onChange={handleChange}
                   placeholder="Demo Link"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -258,7 +291,7 @@ const Portfolio = () => {
                   type="text"
                   id="projectPurchaseLink"
                   name="purchaseLink"
-                  value={editedItem?.purchaseLink}
+                  value={editedItem?.purchase_link}
                   onChange={handleChange}
                   placeholder="Purchase Link"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
@@ -357,18 +390,18 @@ const Portfolio = () => {
             </thead>
             <ReactSortable
               tag="tbody"
-              list={projects}
+              list={projects.map(p => ({ ...p, id: p._id }))}
               setList={(newList) => {
-
                 const updatedList = newList.map((item, index) => ({
                   ...item,
-                  order: index + 1, 
+                  _id: item.id,
+                  order: index + 1,
                 }));
                 setProjects(updatedList);
               }}
             >
               {projects.map((project, i) => (
-                <tr key={project?.id}>
+                <tr key={project?._id}>
                   <td className="py-4 px-6 text-[14px] text-[#272525] font-medium">
                     {i + 1}
                   </td>
@@ -376,22 +409,22 @@ const Portfolio = () => {
                     {project?.name}
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
-                    {project?.desc}
+                    {project?.description}
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
                     <a
-                      href={project?.demoLink}
+                      href={project?.demo_link}
                       className="text-[#3b82b5] underline"
                     >
-                      Demo {project?.id}
+                      Demo
                     </a>
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
                     <a
-                      href={project?.purchaseLink}
+                      href={project?.purchase_link}
                       className="text-[#3b82b5] underline"
                     >
-                      Purchase {project?.id}
+                      Purchase
                     </a>
                   </td>
                   <td className="py-4 px-3 text-[14px] ">
@@ -406,7 +439,7 @@ const Portfolio = () => {
                   </td>
                   <td className="py-4 px-3 text-[14px]">
                     <button
-                      onClick={() => handleDelete(project?.id)}
+                      onClick={() => deleteProject(project?._id)}
                       className="bg-[#ff2323] text-white px-3 py-1 rounded-lg"
                     >
                       Delete
