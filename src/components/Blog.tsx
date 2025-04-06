@@ -3,6 +3,9 @@ import { ReactSortable } from "react-sortablejs";
 import { Modal } from "flowbite-react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useFormik } from "formik";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 
@@ -16,17 +19,45 @@ interface ItemType {
   title: string;
   subject: string;
 }
+
+
+const modules = {
+  toolbar: [
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+  ['link'],
+
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  [{ 'direction': 'rtl' }],                         // text direction
+  
+  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean'] 
+  ],
+};
+
+
 const Blog = () => {
   const [blogs, setBlogs] = useState<ItemType[]>([]);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [fileName, setFileName] = useState("");
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [value, setValue] = useState(editedItem?.description || '');
+  
 
-const formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       blogTitle: editedItem?.title || "",
-      blogDesc: editedItem?.description || "",
+      blogDesc: value || "",
       name: editedItem?.name || "",
       date: editedItem?.date || "",
       subject: editedItem?.subject || "",
@@ -37,7 +68,7 @@ const formik = useFormik({
       // console.log(values);
       const formData = new FormData();
       formData.append("title", values.blogTitle);
-      formData.append("description", values.blogDesc);
+      formData.append("description", value);
       formData.append("name", values.name);
       formData.append("date", values.date);
       formData.append("subject", values.subject);
@@ -53,18 +84,19 @@ const formik = useFormik({
     },
   });
 
+  useEffect(() => {
+    if (editedItem) {
+      setValue(editedItem.description || '');
+    }
+  }, [editedItem]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    // if (!editedItem) return;
     if (e.target.id === "blog-title") {
       setEditedItem({ ...editedItem!, title: e.target.value });
       formik.setFieldValue("blogTitle", e.target.value);
-    } else if (e.target.id && e.target.id === "blog-description") {
-      setEditedItem({ ...editedItem!, description: e.target.value });
-      formik.setFieldValue("blogDesc", e.target.value);
-    } else if (e.target.id && e.target.id === "name") {
+    }  else if (e.target.id && e.target.id === "name") {
       setEditedItem({ ...editedItem!, name: e.target.value });
       formik.setFieldValue("name", e.target.value);
     } else if (e.target.id && e.target.id === "subject") {
@@ -74,6 +106,12 @@ const formik = useFormik({
       setEditedItem({ ...editedItem!, date: e.target.value });
       formik.setFieldValue("date", e.target.value);
     }
+  };
+
+  const handleQuillChange = (content: string) => {
+    setValue(content);
+    setEditedItem({ ...editedItem!, description: content });
+    formik.setFieldValue("blogDesc", content);
   };
 
   const handleBtn = () => {
@@ -151,6 +189,9 @@ function deleteBlog(id: string) {
   useEffect(() => {
     getBlogs()
   }, []);
+  useEffect(() => {
+    console.log(value)
+  }, [value]);
 
   function handleEdit(blog: ItemType) {
     console.log(blog._id);
@@ -208,13 +249,12 @@ function deleteBlog(id: string) {
                 <label htmlFor="blog-description" className="block">
                   Blog Description
                 </label>
-                <textarea
-                  id="blog-description"
-                  name="blogDesc"
-                  value={editedItem?.description}
-                  onChange={handleChange}
-                  placeholder="Blog Description"
-                  className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+                <ReactQuill 
+                  theme="snow" 
+                  value={value} 
+                  onChange={handleQuillChange} 
+                  modules={modules}
+                  className="mb-8"
                 />
                 <label htmlFor="name" className="block">
                   Name
@@ -375,8 +415,9 @@ function deleteBlog(id: string) {
           onClick={() => setOpenModal(true)}
           className="bg-[#FF9900] mt-4 flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
         >
-          <IoAddCircleSharp className="text-[18px]" /> Add Slide
+          <IoAddCircleSharp className="text-[18px]" /> Add Blog
         </button>
+        
       </div>
     </>
   );
