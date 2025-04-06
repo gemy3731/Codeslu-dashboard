@@ -8,15 +8,16 @@ interface ItemType {
   name: string;
   role: string;
   description: string;
-  rating: number|string;
+  rating: number | string;
 }
 
 const Reviews = () => {
   const [reviews, setReviews] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
-const formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       name: editedItem?.name || "",
       role: editedItem?.role || "",
@@ -31,8 +32,6 @@ const formik = useFormik({
     },
   });
 
-
-
   function onCloseModal() {
     setOpenModal(false);
     setEditedItem(null);
@@ -40,7 +39,7 @@ const formik = useFormik({
   const handleBtn = () => {
     setOpenModal(false);
     setEditedItem(null);
-  }
+  };
 
   const getReviews = async () => {
     // console.log("getBlogs")
@@ -48,7 +47,7 @@ const formik = useFormik({
     const data = await res.json();
     // console.log(data)
     setReviews(data);
-  }
+  };
   useEffect(() => {
     getReviews();
   }, []);
@@ -66,40 +65,61 @@ const formik = useFormik({
       });
   };
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     // if (!editedItem) return;
-    if(e.target.id==="reviews-name"){
+    if (e.target.id === "reviews-name") {
       setEditedItem({ ...editedItem!, name: e.target.value });
       formik.setFieldValue("name", e.target.value);
-    }else if(e.target.id&&e.target.id==="reviews-Description"){
+    } else if (e.target.id && e.target.id === "reviews-Description") {
       setEditedItem({ ...editedItem!, description: e.target.value });
       formik.setFieldValue("desc", e.target.value);
-    }else if(e.target.id&&e.target.id==="reviews-role"){
+    } else if (e.target.id && e.target.id === "reviews-role") {
       setEditedItem({ ...editedItem!, role: e.target.value });
       formik.setFieldValue("role", e.target.value);
-    }else if(e.target.id&&e.target.id==="reviews-rating"){
+    } else if (e.target.id && e.target.id === "reviews-rating") {
       setEditedItem({ ...editedItem!, rating: e.target.value });
       formik.setFieldValue("rating", e.target.value);
     }
   };
   function addReview(values: ItemType) {
-    
-  
     fetch(`${apiUrl}/api/reviews`, {
       method: "POST",
       body: JSON.stringify(values),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-    }).then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-      setReviews([...reviews, data]);
-      handleBtn();
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setReviews([...reviews, data]);
+        handleBtn();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+  function handleEdit(e: ItemType) {
+    console.log(e._id);
+    fetch(`${apiUrl}/api/reviews/${e._id}/order`, {
+      method: "PUT",
+      body: JSON.stringify(e),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        // setReviews([...reviews, data]);
+        handleBtn();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        handleBtn();
+      });
   }
   return (
     <>
@@ -119,9 +139,12 @@ const formik = useFormik({
           <Modal.Body className="bg-[#edeeee]">
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] bg-white">
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
-                {editedItem ? "Edit Review" : "Add Review"}
+                {isEdit ? "Edit Review" : "Add Review"}
               </h3>
-              <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 dashFrom">
+              <form
+                onSubmit={formik.handleSubmit}
+                className="flex flex-col gap-4 dashFrom"
+              >
                 <label htmlFor="reviews-Description" className="block">
                   Reviews Description
                 </label>
@@ -171,12 +194,25 @@ const formik = useFormik({
                   max={5}
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
-                <button
-                  type="submit"
-                  className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
-                >
-                  <IoAddCircleSharp className="text-[18px]"/> {editedItem ? "Edit Review" : "Add Review"}
-                </button>
+                {isEdit ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleEdit(editedItem!);
+                    }}
+                    className="bg-[#FF9900] flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
+                  >
+                    Edit Review
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="bg-[#FF9900] flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
+                  >
+                    <IoAddCircleSharp className="text-[18px]" />{" "}
+                    Add Review
+                  </button>
+                )}
               </form>
             </div>
           </Modal.Body>
@@ -210,6 +246,7 @@ const formik = useFormik({
                     onClick={() => {
                       setEditedItem(review);
                       setOpenModal(true);
+                      setIsEdit(true);
                     }}
                     className="bg-[#232f3e] text-white px-3 py-1 rounded-lg w-full mt-3"
                   >
