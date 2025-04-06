@@ -3,6 +3,9 @@ import { ReactSortable } from "react-sortablejs";
 import { Modal } from "flowbite-react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useFormik } from "formik";
+const apiUrl = import.meta.env.VITE_API_URL;
+
+
 interface ItemType {
   _id: string;
   id: string;
@@ -13,87 +16,12 @@ interface ItemType {
   title: string;
   subject: string;
 }
-// const list = [
-//   {
-//     id: 1,
-//     order: 1,
-//     title: "Blog Title",
-//     name: "Mohamed",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-//   {
-//     id: 2,
-//     order: 2,
-//     title: "Blog Title",
-//     name: "Osama",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-//   {
-//     id: 3,
-//     order: 3,
-//     title: "Blog Title",
-//     name: "Mustafa",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-//   {
-//     id: 4,
-//     order: 4,
-//     name: "Ahmed",
-//     title: "Blog Title",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-//   {
-//     id: 5,
-//     order: 5,
-//     title: "Blog Title",
-//     name: "Tarek",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-//   {
-//     id: 6,
-//     order: 6,
-//     title: "Blog Title",
-//     name: "ali",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-//   {
-//     id: 7,
-//     order: 7,
-//     title: "Blog Title",
-//     name: "omar",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-//   {
-//     id: 8,
-//     order: 8,
-//     title: "Blog Title",
-//     name: "amr",
-//     date: "MARCH 1, 2023",
-//     subject: "Blog Subject",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//   },
-// ];
-const apiUrl = import.meta.env.VITE_API_URL;
 const Blog = () => {
   const [blogs, setBlogs] = useState<ItemType[]>([]);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [fileName, setFileName] = useState("");
-
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
 const formik = useFormik({
     initialValues: {
@@ -151,6 +79,7 @@ const formik = useFormik({
   const handleBtn = () => {
     setOpenModal(false);
     setEditedItem(null);
+    setIsEdit(false);
   };
 
   function onCloseModal() {
@@ -221,9 +150,27 @@ function deleteBlog(id: string) {
   useEffect(() => {
     getBlogs()
   }, []);
-  // const handleDelete = (e: string) => {
-  //   setBlogs(blogs.filter((blog) => blog._id !== e));
-  // };
+
+  function handleEdit(blog: ItemType) {
+    console.log(blog._id);
+    fetch(`${apiUrl}/api/blog/${blog._id}/order`, {
+      method: "PUT",
+      body: JSON.stringify(blog),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        handleBtn();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        handleBtn();
+      });
+  }
+
   return (
     <>
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[50px] py-[54px] ">
@@ -242,7 +189,7 @@ function deleteBlog(id: string) {
           <Modal.Body className="bg-[#edeeee]">
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] bg-white">
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
-                {editedItem ? "Edit Blog" : "Add New Blog"}
+                {isEdit ? "Edit Blog" : "Add New Blog"}
               </h3>
               <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 dashFrom">
                 <label htmlFor="blog-title" className="block">
@@ -330,12 +277,25 @@ function deleteBlog(id: string) {
                     Choose Image
                   </label>
                 </div>
-                <button
-                  type="submit"
-                  className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
-                >
-                  <IoAddCircleSharp className="text-[18px]" /> {editedItem ? "Edit" : "Add"} Blog
-                </button>
+                {isEdit ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleEdit(editedItem!);
+                    }}
+                    className="bg-[#FF9900] flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="bg-[#FF9900] flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
+                  >
+                    <IoAddCircleSharp className="text-[18px]" />{" "}
+                    Add
+                  </button>
+                )}
               </form>
             </div>
           </Modal.Body>
@@ -389,6 +349,7 @@ function deleteBlog(id: string) {
                     <button
                       onClick={() => {
                         onEdit(blog);
+                        setIsEdit(true);
                       }}
                       className="bg-[#232f3e] text-white px-3 py-1 rounded-lg"
                     >
