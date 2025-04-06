@@ -1,5 +1,8 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
 interface AboutUsData {
   description: string;
   left_card_upper_text: string;
@@ -10,7 +13,7 @@ interface AboutUsData {
   right_card_image: string | null;
 }
 const AboutUs = () => {
-  const [aboutUs, setAboutUs] = useState<AboutUsData | null>(null);
+  const [aboutUs, setAboutUs] = useState<AboutUsData>();
   const [fileNameRight, setFileNameRight] = useState("");
   const [fileNameLeft, setFileNameLeft] = useState("");
 
@@ -19,9 +22,10 @@ const AboutUs = () => {
   }, []);
 
   const getData = async () => {
-    const res = await fetch("/data.json");
+    const res = await fetch(`${apiUrl}/api/about`);
     const data = await res.json();
-    setAboutUs( data.about_us);
+    console.log(data)
+    setAboutUs(data[0]);
   };
   const formik = useFormik({
     initialValues: {
@@ -37,17 +41,18 @@ const AboutUs = () => {
     onSubmit: (values) => {
       console.log(values);
       const formData = new FormData();
-      formData.append("desc", values.desc);
-      formData.append("upperTextLeftCard", values.upperTextLeftCard);
-      formData.append("lowerTextLeftCard", values.lowerTextLeftCard);
-      formData.append("upperTextRightCard", values.upperTextRightCard);
-      formData.append("lowerTextRightCard", values.lowerTextRightCard);
+      formData.append("description", values.desc);
+      formData.append("left_card_upper_text", values.upperTextLeftCard);
+      formData.append("left_card_lower_text", values.lowerTextLeftCard);
+      formData.append("right_card_upper_text", values.upperTextRightCard);
+      formData.append("right_card_lower_text", values.lowerTextRightCard);
       if (values.ImgLeftCard) {
-        formData.append("ImgLeftCard", values.ImgLeftCard);
+        formData.append("left_card_image", values.ImgLeftCard);
       }
       if (values.ImgRightCard) {
-        formData.append("ImgRightCard", values.ImgRightCard);
+        formData.append("right_card_image", values.ImgRightCard);
       }
+      addNewAbout(formData);
     },
   });
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +73,35 @@ const AboutUs = () => {
       }
     }
   };
+
+  function addNewAbout(formData: FormData) {
+    const jsonData = {
+      description: formData.get("description"),
+      left_card_upper_text: formData.get("left_card_upper_text"),
+      left_card_lower_text: formData.get("left_card_lower_text"),
+      right_card_upper_text: formData.get("right_card_upper_text"),
+      right_card_lower_text: formData.get("right_card_lower_text"),
+      left_card_image: formData.get("left_card_image"),
+      right_card_image: formData.get("right_card_image"),
+    };
+  
+    fetch(`${apiUrl}/api/about`, {
+      method: "POST",
+      body: JSON.stringify(jsonData),
+      headers: {
+        "Content-Type": "application/json"
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setAboutUs({ ...aboutUs, ...data });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   return (
     <>
       <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
