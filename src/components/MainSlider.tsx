@@ -5,44 +5,6 @@ import { IoAddCircleSharp } from "react-icons/io5";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const myImage = "https://i.ibb.co/qCkd9jS/img1.jpg";
-// const images = [
-//   {
-//     id: 1,
-//     url: "https://i.ibb.co/qCkd9jS/img1.jpg",
-//     name: "Switzerland",
-//     desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-//   },
-//   {
-//     id: 2,
-//     url: "https://i.ibb.co/jrRb11q/img2.jpg",
-//     name: "Finland",
-//     desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-//   },
-//   {
-//     id: 3,
-//     url: "https://i.ibb.co/NSwVv8D/img3.jpg",
-//     name: "Iceland",
-//     desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-//   },
-//   {
-//     id: 4,
-//     url: "https://i.ibb.co/Bq4Q0M8/img4.jpg",
-//     name: "Australia",
-//     desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-//   },
-//   {
-//     id: 5,
-//     url: "https://i.ibb.co/jTQfmTq/img5.jpg",
-//     name: "Netherland",
-//     desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-//   },
-//   {
-//     id: 6,
-//     url: "https://i.ibb.co/RNkk6L0/img6.jpg",
-//     name: "Ireland",
-//     desc: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.`,
-//   },
-// ];
 
 interface ItemType {
   _id: string;

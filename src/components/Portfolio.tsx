@@ -7,9 +7,11 @@ import { ReactSortable } from "react-sortablejs";
 import { Label, Modal } from "flowbite-react";
 import { useFormik } from "formik";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 interface ItemType {
   _id: string;
-  id: string;
+  category: string;
   name: string;
   description: string;
   demo_link: string;
@@ -18,72 +20,6 @@ interface ItemType {
   poster?: string;
   screens?: string[];
 }
-// const list = [
-//   {
-//     id: 1,
-//     order: 1,
-//     name: "Mohamed",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-//   {
-//     id: 2,
-//     order: 2,
-//     name: "Osama",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-//   {
-//     id: 3,
-//     order: 3,
-//     name: "Mustafa",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-//   {
-//     id: 4,
-//     order: 4,
-//     name: "Ahmed",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-//   {
-//     id: 5,
-//     order: 5,
-//     name: "Tarek",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-//   {
-//     id: 6,
-//     order: 6,
-//     name: "ali",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-//   {
-//     id: 7,
-//     order: 7,
-//     name: "omar",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-//   {
-//     id: 8,
-//     order: 8,
-//     name: "amr",
-//     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, error.",
-//     demoLink: "https://google.com",
-//     purchaseLink: "https://google.com",
-//   },
-// ];
 
 const projectType = [
   { name: "IOS", icon: <ImAppleinc />, number: 15 },
@@ -91,25 +27,37 @@ const projectType = [
   { name: "GAMES", icon: <FaGamepad />, number: 5 },
   { name: "WEB", icon: <IoPlanetSharp />, number: 1 },
 ];
-const apiUrl = import.meta.env.VITE_API_URL;
+
 const Portfolio = () => {
   const [projects, setProjects] = useState<ItemType[]>([]);
+  const [allProjects, setAllProjects] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const [fileName, setFileName] = useState("");
   const [message, setMessage] = useState("");
+  const [category, setCategory] = useState("");
+  // const [cat, setCat] = useState("");
   // const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   function handleBtn(){
     setOpenModal(false);
     setEditedItem(null);
   };
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setCategory(event.target.value);
+    if (editedItem) {
+      setEditedItem({ ...editedItem, category: event.target.value });
+    }
+    formik.setFieldValue("category", event.target.value);
+  };
   const formik = useFormik({
     initialValues: {
-      projectName: editedItem?.name || "",
-      projectDesc: editedItem?.description || "",
-      ProjectCat: editedItem?.name || "",
-      demoLink: editedItem?.demo_link || "",
-      purchaseLink: editedItem?.purchase_link || "",
+      name: editedItem?.name || "",
+      description: editedItem?.description || "",
+      category: editedItem?.category || "",
+      demo_link: editedItem?.demo_link || "",
+      purchase_link: editedItem?.purchase_link || "",
       projectPoster: null,
       screens: null,
       // order: editedItem?.order || 0,
@@ -118,11 +66,11 @@ const Portfolio = () => {
     onSubmit: (values) => {
       console.log(values);
       const formData = new FormData();
-      formData.append("name", values.projectName);
-      formData.append("description", values.projectDesc);
-      formData.append("category", values.ProjectCat);
-      formData.append("demo_link", values.demoLink);
-      formData.append("purchase_link", values.purchaseLink);
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("category", values.category);
+      formData.append("demo_link", values.demo_link);
+      formData.append("purchase_link", values.purchase_link);
       // formData.append("order", values.order.toString());
       if (values.projectPoster) {
         formData.append("poster", values.projectPoster);
@@ -131,20 +79,39 @@ const Portfolio = () => {
         formData.append("screens", values.screens);
       }
       // updateProject(formData);
+      updateProject(formData)
       handleBtn();
     },
   });
 
-  // function updateProject(formData: FormData) {
-  //   const jsonData = {
-  //     name: formData.get("name"),
-  //     description: formData.get("description"),
-  //     category: typeof formData.get("category") === "string" && formData.get("category") ? (formData.get("category") as string).toLowerCase() : "",
-  //     demo_link: formData.get("demo_link"),
-  //     purchase_link: formData.get("purchase_link"),
-  //     poster: formData.get("poster"),
-  //     screens: formData.get("screens"),
-  //   };
+
+  function updateProject(formData: FormData) {
+    const jsonData = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      category: typeof formData.get("category") === "string" && formData.get("category") ? (formData.get("category") as string).toLowerCase() : "",
+      demo_link: formData.get("demo_link"),
+      purchase_link: formData.get("purchase_link"),
+      poster: formData.get("poster"),
+      screens: formData.get("screens"),
+    };
+    fetch(`${apiUrl}/api/projects/${editedItem?._id}/order`, {
+      method: "PUT",
+      body: JSON.stringify(jsonData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        handleBtn();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        handleBtn();
+      });
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -197,15 +164,37 @@ const Portfolio = () => {
     const res = await fetch(`${apiUrl}/api/projects`);
     const data = await res.json();
     // console.log(data)
-    setProjects(data);
+    setAllProjects(data);
+  }
+  
+  const handleCategory = (currentCat: string = "IOS") => {
+    console.log('All projects:', allProjects);
+    console.log(' projects:', projects);
+    console.log('Current category:', currentCat);
+    
+    const filteredProjects = allProjects.filter((project) => {
+      console.log('Project category:', project.category);
+      return project.category.toLowerCase() === currentCat.toLowerCase();
+    });
+    // console.log('Filtered projects:', filteredProjects);
+    setProjects(filteredProjects);
   }
 
-  useEffect(() => {
-    console.log(projects);
-  }, [projects]);
+  // useEffect(() => {
+  //   console.log(projects);
+  // }, [projects]);
+
   useEffect(() => {
     getProjects();
   }, []);
+
+  useEffect(() => {
+    if (allProjects.length > 0) {
+      handleCategory();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allProjects]);
+
   function deleteProject(id: string) {
     fetch(`${apiUrl}/api/projects/${id}`, {
       method: "DELETE",
@@ -213,12 +202,14 @@ const Portfolio = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        setAllProjects(allProjects.filter((project) => project._id !== id));
         setProjects(projects.filter((project) => project._id !== id));
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   }
+  
   return (
     <div>
       <Modal
@@ -232,7 +223,7 @@ const Portfolio = () => {
         <Modal.Body className="bg-[#edeeee]">
           <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[180px] py-[54px] px-[37px]">
             <h2 className="text-[32px] font-[400] leading-[29.05px] mb-[26px] text-center">
-              Add New Project
+              Edit Project
             </h2>
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px]">
               <form
@@ -264,14 +255,32 @@ const Portfolio = () => {
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
                 <div className="w-full">
-                  <div className="mb-2 block">
-                    <Label
-                      htmlFor="projectCategory"
-                      className="text-[16px] font-normal"
-                      value="Project Category"
-                    />
-                  </div>
-                </div>
+              <div className="mb-2 block">
+                <Label
+                  htmlFor="projectCategory"
+                  className="text-[16px] font-normal"
+                  value="Project Category"
+                />
+              </div>
+              <select
+                id="projectCategory"
+                className={
+                  category == ""
+                    ? "placeholder outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+                    : "outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+                }
+                value={category}
+                onChange={handleCategoryChange}
+              >
+                <option value="" disabled hidden className="text-black">
+                  Project Category
+                </option>
+                <option className="text-black">IOS</option>
+                <option className="text-black">ANDROID</option>
+                <option className="text-black">GAMES</option>
+                <option className="text-black">WEB</option>
+              </select>
+            </div>
                 <label htmlFor="projectDemoLink" className="block">
                   Demo Link
                 </label>
@@ -359,7 +368,7 @@ const Portfolio = () => {
         {/* 4 divs under the navbar, using grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
           {projectType.map((type, index) => (
-            <div key={index} className="bg-white rounded-[20px] p-6 shadow-md">
+            <div key={index} onClick={()=>handleCategory(type.name)} className="bg-white rounded-[20px] p-6 shadow-md">
               <div>
                 <p className="text-[24px] font-bold text-[#272525]">
                   {type.number}
