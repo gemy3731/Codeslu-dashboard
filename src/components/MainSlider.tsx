@@ -18,7 +18,7 @@ const MainSlider = () => {
   const [imgs, setImgs] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
-
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
@@ -67,11 +67,13 @@ const MainSlider = () => {
   function onCloseModal() {
     setOpenModal(false);
     setEditedItem(null);
+    setIsEdit(false);
   }
 
   const handleBtn = () => {
     setOpenModal(false);
     setEditedItem(null);
+    setIsEdit(false);
   };
 
   const handleDelete = (id: string) => {
@@ -117,6 +119,26 @@ const MainSlider = () => {
   useEffect(() => {
     getData();
   }, []);
+  
+  function handleEdit(slide: ItemType) {
+    console.log(slide._id);
+    fetch(`${apiUrl}/api/slider/${slide._id}/order`, {
+      method: "PUT",
+      body: JSON.stringify(slide),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        handleBtn();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        handleBtn();
+      });
+  }
 
   return (
     <>
@@ -136,7 +158,7 @@ const MainSlider = () => {
           <Modal.Body className="bg-[#edeeee]">
             <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] bg-white">
               <h3 className="text-[24px] text-center font-[400] leading-[29.05px] mb-[26px]">
-                {editedItem ? "Edit Slide" : "Add New Slide"}
+                {isEdit ? "Edit Slide" : "Add New Slide"}
               </h3>
               <form
                 onSubmit={formik.handleSubmit}
@@ -189,13 +211,25 @@ const MainSlider = () => {
                     Choose Image
                   </label>
                 </div>
-                <button
-                  type="submit"
-                  className="bg-[#FF9900] flex items-center gap-2  rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
-                >
-                  <IoAddCircleSharp className="text-[18px]" />{" "}
-                  {editedItem ? "Edit Slide" : "Add Slide"}
-                </button>
+                {isEdit ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleEdit(editedItem!);
+                    }}
+                    className="bg-[#FF9900] flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="bg-[#FF9900] flex items-center gap-2 rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
+                  >
+                    <IoAddCircleSharp className="text-[18px]" />{" "}
+                    Add
+                  </button>
+                )}
               </form>
             </div>
           </Modal.Body>
@@ -225,6 +259,7 @@ const MainSlider = () => {
                       onClick={() => {
                         setEditedItem(img);
                         setOpenModal(true);
+                        setIsEdit(true);
                       }}
                       className="bg-[#232f3e] text-white px-3 py-1 rounded-lg w-full mt-3"
                     >

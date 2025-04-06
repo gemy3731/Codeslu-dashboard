@@ -85,6 +85,7 @@ const formik = useFormik({
   function onCloseModal() {
     setEditedItem(null);
     setOpenModal(false);
+    setIsEdit(false);
   }
   function onEdit(values: ItemType) {
     setOpenModal(true);

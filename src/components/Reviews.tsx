@@ -35,10 +35,12 @@ const Reviews = () => {
   function onCloseModal() {
     setOpenModal(false);
     setEditedItem(null);
+    setIsEdit(false);
   }
   const handleBtn = () => {
     setOpenModal(false);
     setEditedItem(null);
+    setIsEdit(false);
   };
 
   const getReviews = async () => {
