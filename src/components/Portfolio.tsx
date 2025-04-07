@@ -105,6 +105,7 @@ const Portfolio = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        getProjects();
         handleBtn();
       })
       .catch((error) => {
