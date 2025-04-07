@@ -115,7 +115,7 @@ const Reviews = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        // setReviews([...reviews, data]);
+        setReviews(reviews.map((review) => review._id === e._id ? e : review));
         handleBtn();
       })
       .catch((error) => {
