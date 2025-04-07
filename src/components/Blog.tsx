@@ -205,6 +205,7 @@ function deleteBlog(id: string) {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        setBlogs(blogs.map(item => item._id === blog._id ? blog : item));
         handleBtn();
       })
       .catch((error) => {
@@ -212,6 +213,13 @@ function deleteBlog(id: string) {
         handleBtn();
       });
   }
+
+  const truncateText = (html: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    const text = tempDiv.textContent || '';
+    return text.split(" ").slice(0, 4).join(" ") + "...";
+  };
 
   return (
     <>
@@ -378,7 +386,7 @@ function deleteBlog(id: string) {
                     {blog?.title?.split(" ").slice(0, 4).join(" ")}...
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
-                    {blog?.description?.split(" ").slice(0, 4).join(" ")}...
+                    <div dangerouslySetInnerHTML={{ __html: truncateText(blog?.description || '') }} />
                   </td>
                   <td className="py-4 px-6 text-[14px] text-[#272525]">
                     {blog?.name}
