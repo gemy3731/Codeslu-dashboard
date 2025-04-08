@@ -155,15 +155,15 @@ const Dashboard = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                       {/* Visitor Info */}
                       <div className="bg-[#1abc9c] rounded-lg shadow-md p-4">
-                        <p className="text-[#232F3E] text-[14px] font-bold mb-2">
+                        <p className="text-[#ffffff] text-[14px] font-bold mb-2">
                           Number of visitors
                         </p>
-                        <p className="text-[rgba(0,0,0,0.25)] text-[10px] p-2 rounded-md mb-4">
+                        <p className="text-[rgba(255,255,255,0.75)] text-[10px] p-2 rounded-md mb-4">
                           New Visitors Today
                         </p>
                         <div className="flex justify-between items-center">
-                          <HiUsers className="mr-2" />
-                          <p className="text-[rgba(9, 158, 49, 1)] text-[24px]">
+                          <HiUsers className="mr-2 text-white" />
+                          <p className="text-white text-[24px]">
                             +100
                           </p>
                         </div>
@@ -171,15 +171,15 @@ const Dashboard = () => {
 
                       {/* Sales Info */}
                       <div className="bg-[#2ecc71] rounded-lg shadow-md p-4">
-                        <p className="text-[#232F3E] text-[14px] font-bold mb-2">
+                        <p className="text-[#ffffff] text-[14px] font-bold mb-2">
                           New Sales
                         </p>
-                        <p className="text-[rgba(0,0,0,0.25)] text-[10px] p-2 rounded-md mb-4">
+                        <p className="text-[rgba(255,255,255,0.75)] text-[10px] p-2 rounded-md mb-4">
                           New Sales Today
                         </p>
                         <div className="flex justify-between items-center">
-                          <FaDollarSign className="mr-2" />
-                          <p className="text-[rgba(71, 123, 255, 1)] text-[24px]">
+                          <FaDollarSign className="mr-2 text-white" />
+                          <p className="text-white text-[24px]">
                             + $500
                           </p>
                         </div>
@@ -187,15 +187,15 @@ const Dashboard = () => {
 
                       {/* Projects Info */}
                       <div className="bg-[#f39c12] rounded-lg shadow-md p-4">
-                        <p className="text-[#232F3E] text-[14px] font-bold mb-2">
+                        <p className="text-[#ffffff] text-[14px] font-bold mb-2">
                           All Projects
                         </p>
-                        <p className="text-[rgba(0,0,0,0.25)] text-[10px] p-2 rounded-md mb-4">
+                        <p className="text-[rgba(255,255,255,0.75)] text-[10px] p-2 rounded-md mb-4">
                           All Projects You Have
                         </p>
                         <div className="flex justify-between items-center">
-                          <HiPlus className="mr-2" />
-                          <p className="text-[rgba(144, 48, 38, 1)] text-[24px]">
+                          <HiPlus className="mr-2 text-white" />
+                          <p className="text-white text-[24px]">
                             100
                           </p>
                         </div>
@@ -203,15 +203,15 @@ const Dashboard = () => {
 
                       {/* Shipments Info */}
                       <div className="bg-[#e67e22] rounded-lg shadow-md p-4">
-                        <p className="text-[#232F3E] text-[14px] font-bold mb-2">
+                        <p className="text-[#ffffff] text-[14px] font-bold mb-2">
                           Number of Shipments
                         </p>
-                        <p className="text-[rgba(0,0,0,0.25)] text-[10px] p-2 rounded-md mb-4">
+                        <p className="text-[rgba(255,255,255,0.75)] text-[10px] p-2 rounded-md mb-4">
                           All Shipments You Have
                         </p>
                         <div className="flex justify-between items-center">
-                          <FaGlobe className="mr-2" />
-                          <p className="text-[rgba(255, 153, 0, 0.74)] text-[24px]">
+                          <FaGlobe className="mr-2 text-white" />
+                          <p className="text-white text-[24px]">
                             100
                           </p>
                         </div>

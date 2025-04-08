@@ -11,13 +11,14 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 interface ItemType {
   _id: string;
-  id: string;
+  // id: string;
   name: string;
   date: string;
   order: number;
   description: string;
   title: string;
   subject: string;
+  image: string;
 }
 
 
@@ -62,6 +63,7 @@ const Blog = () => {
       date: editedItem?.date || "",
       subject: editedItem?.subject || "",
       image: null,
+      order: editedItem?.order || 0,
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -72,6 +74,7 @@ const Blog = () => {
       formData.append("name", values.name);
       formData.append("date", values.date);
       formData.append("subject", values.subject);
+      formData.append("order", values.order.toString());
       // formData.append("order", values.order.toString());
       if (values.image) {
         formData.append("image", values.image);
@@ -105,6 +108,9 @@ const Blog = () => {
     } else if (e.target.id && e.target.id === "date") {
       setEditedItem({ ...editedItem!, date: e.target.value });
       formik.setFieldValue("date", e.target.value);
+    } else if (e.target.id && e.target.id === "order") {
+      setEditedItem({ ...editedItem!, order: parseInt(e.target.value) });
+      formik.setFieldValue("order", parseInt(e.target.value));
     }
   };
 
@@ -150,7 +156,8 @@ const getBlogs = async () => {
     name: formData.get("name"),
     date: formData.get("date")==''?null:formData.get("date"),
     subject: formData.get("subject"),
-    image: formData.get("image")
+    image: formData.get("image"),
+    order: blogs.length + 1
   };
 
   fetch(`${apiUrl}/api/blog`, {
@@ -194,6 +201,7 @@ function deleteBlog(id: string) {
   }, [value]);
 
   function handleEdit(blog: ItemType) {
+    console.log(blog)
     console.log(blog._id);
     fetch(`${apiUrl}/api/blog/${blog._id}/order`, {
       method: "PUT",
@@ -300,6 +308,18 @@ function deleteBlog(id: string) {
                   placeholder="Subject"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
+                <label htmlFor="order" className="block">
+                  Order
+                </label>
+                <input
+                  type="number"
+                  id="order"
+                  name="order"
+                  value={editedItem?.order}
+                  onChange={handleChange}
+                  placeholder="Subject"
+                  className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+                />
 
                 <label htmlFor="slideImage" className="block">
                   Blog Image
@@ -366,15 +386,20 @@ function deleteBlog(id: string) {
                 <th className="py-3 px-6 text-[12px]">Delete</th>
               </tr>
             </thead>
-            <ReactSortable
-              tag="tbody"
-              list={blogs}
+            {/* @ts-expect-error - ReactSortable expects id property but we use _id */}
+            <ReactSortable tag="tbody" list={blogs}
               setList={(newList) => {
                 const updatedList = newList.map((item, index) => ({
                   ...item,
                   order: index + 1,
                 }));
+                /* @ts-expect-error - ReactSortable expects id property but we use _id */
                 setBlogs(updatedList);
+              }}
+              onEnd={(evt)=>{
+                const movedItem = blogs[evt.oldIndex!];
+                console.log("movedItem",{...movedItem,order:evt.newIndex!+1});
+                handleEdit({image:movedItem.image,name:movedItem.name,_id:movedItem._id,date:movedItem.date,description:movedItem.description,title:movedItem.title,subject:movedItem.subject,order:evt.newIndex!+1});
               }}
             >
               {blogs.map((blog, i) => (
@@ -432,3 +457,5 @@ function deleteBlog(id: string) {
 };
 
 export default Blog;
+
+
