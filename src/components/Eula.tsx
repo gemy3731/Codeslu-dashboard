@@ -1,8 +1,11 @@
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const modules = {
   toolbar: [
     ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -31,14 +34,42 @@ const Eula = () => {
     setValue(content);
     formik.setFieldValue("description", content);
   };
-const formik = useFormik({
+  const formik = useFormik({
     initialValues: {
-        description: "",
+      description: "",
     },
     onSubmit: (values) => {
-        console.log(values);
+      console.log(values);
+      changeData(values);
     },
-});
+  });
+  async function changeData(values: { description: string }) {
+    fetch(`${apiUrl}/api/eula`, {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setValue(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+  async function getData() {
+    const res = await fetch(`${apiUrl}/api/eula`);
+    const data = await res.json();
+    console.log(data);
+    setValue(data[0]);
+  }
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <ReactQuill

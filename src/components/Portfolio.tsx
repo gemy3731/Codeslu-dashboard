@@ -113,6 +113,26 @@ const Portfolio = () => {
         handleBtn();
       });
   }
+  function updateOrder(product:ItemType) {
+
+    fetch(`${apiUrl}/api/projects/${editedItem?._id}/order`, {
+      method: "PUT",
+      body: JSON.stringify(product),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        getProjects();
+        handleBtn();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        handleBtn();
+      });
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -408,6 +428,11 @@ const Portfolio = () => {
                   order: index + 1,
                 }));
                 setProjects(updatedList);
+              }}
+              onEnd={(evt)=>{
+                const movedItem = projects[evt.oldIndex!];
+                console.log("movedItem",{...movedItem,order:evt.newIndex!+1});
+                updateOrder({poster:movedItem.poster,name:movedItem.name,_id:movedItem._id,description:movedItem.description,category:movedItem.category,demo_link:movedItem.demo_link,purchase_link:movedItem.purchase_link,screens:movedItem.screens,order:evt.newIndex!+1});
               }}
             >
               {projects.map((project, i) => (
