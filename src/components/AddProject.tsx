@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Label } from "flowbite-react";
 import { useFormik } from "formik";
-
+import { LuLoaderCircle } from "react-icons/lu";
+import toast from "react-hot-toast";
 const apiUrl = import.meta.env.VITE_API_URL;
 const AddProject = () => {
   // const [projects, setProjects] = useState(null);
   const [fileName, setFileName] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
@@ -16,6 +18,9 @@ const AddProject = () => {
       ProjectCat: "",
       demoLink: "",
       purchaseLink: "",
+      appStoreLink: "",
+      googlePlayLink: "",
+      video: "",
       projectPoster: null,
       screens: null,
     },
@@ -28,6 +33,9 @@ const AddProject = () => {
       formData.append("category", values.ProjectCat);
       formData.append("demo_link", values.demoLink);
       formData.append("purchase_link", values.purchaseLink);
+      formData.append("app_store", values.appStoreLink);
+      formData.append("google_play", values.googlePlayLink);
+      formData.append("video", values.video);
       if (values.projectPoster) {
         formData.append("poster", values.projectPoster);
       }
@@ -64,31 +72,44 @@ const AddProject = () => {
     const jsonData = {
       name: formData.get("name"),
       description: formData.get("description"),
-      category: typeof formData.get("category") === "string" && formData.get("category") ? (formData.get("category") as string).toLowerCase() : "",
+      category:
+        typeof formData.get("category") === "string" && formData.get("category")
+          ? (formData.get("category") as string).toLowerCase()
+          : "",
       demo_link: formData.get("demo_link"),
       purchase_link: formData.get("purchase_link"),
+      app_store: formData.get("app_store"),
+      google_play: formData.get("google_play"),
+      video: formData.get("video"),
       poster: formData.get("poster"),
       screens: formData.get("screens"),
     };
-  
+    setIsLoading(true);
     fetch(`${apiUrl}/api/projects`, {
       method: "POST",
       body: JSON.stringify(jsonData),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        // setBlogs([...blogs, data]);
-        // handleBtn();
+        toast.success("One product add successfully", {
+          position: "bottom-right",
+          style: { backgroundColor: "#232f3e", color: "white" },
+        });
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error:", error);
+        toast.error("Failed to add product", {
+          position: "bottom-right",
+          style: { backgroundColor: "#232f3e", color: "white" },
+        });
+        setIsLoading(false);
       });
   }
-  
 
   return (
     <>
@@ -113,6 +134,7 @@ const AddProject = () => {
               id="projectName"
               placeholder="Project Name"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+              required
             />
             <label htmlFor="projectDesc" className="block">
               Project Description{" "}
@@ -126,6 +148,7 @@ const AddProject = () => {
               id="projectDesc"
               placeholder="Project Description"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+              required
             />
             <div className="w-full">
               <div className="mb-2 block">
@@ -144,6 +167,7 @@ const AddProject = () => {
                 }
                 value={category}
                 onChange={handleCategoryChange}
+                required
               >
                 <option value="" disabled hidden className="text-black">
                   Project Category
@@ -178,6 +202,45 @@ const AddProject = () => {
               type="text"
               id="purchaseLink"
               placeholder="Purchase Link"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+            />
+            <label htmlFor="appStoreLink" className="block">
+              App Store Link
+            </label>
+            <input
+              name="appStoreLink"
+              value={formik.values.appStoreLink}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              type="text"
+              id="appStoreLink"
+              placeholder="App Store Link"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+            />
+            <label htmlFor="googlePlayLink" className="block">
+              Google Play Link
+            </label>
+            <input
+              name="googlePlayLink"
+              value={formik.values.googlePlayLink}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              type="text"
+              id="googlePlayLink"
+              placeholder="Google Play Link"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+            />
+            <label htmlFor="video" className="block">
+              Video
+            </label>
+            <input
+              name="video"
+              value={formik.values.googlePlayLink}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              type="text"
+              id="video"
+              placeholder="Video"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
             />
             <label htmlFor="file-input" className="block">
@@ -228,7 +291,11 @@ const AddProject = () => {
               )}
             </div>
             <button className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto">
-              Add Project
+              {isLoading ? (
+                <LuLoaderCircle className="animate-spin text-[24px]" />
+              ) : (
+                "Add Project"
+              )}
             </button>
           </form>
         </div>
