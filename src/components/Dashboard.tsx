@@ -26,6 +26,7 @@ import AddMember from "./AddMember";
 // import { FaExchangeAlt } from "react-icons/fa";
 import ChangePass from "./ChangePass";
 import TermsCollection from "./TermsCollection";
+import InformationSlider from "./InformationSlider";
 
 
 const Dashboard = () => {
@@ -119,6 +120,13 @@ const Dashboard = () => {
                   className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
                 >
                   Terms & Policy & EULA
+                </Sidebar.Item>
+                <Sidebar.Item
+                  onClick={() => setActiveTab("informationSlider")}
+                  // icon={MdOutlineHorizontalRule}
+                  className="cursor-pointer uppercase hover:bg-gray-700 text-white hover:text-gray-200 py-3 px-4 rounded-lg transition duration-200 ease-in-out"
+                >
+                  Information Slider
                 </Sidebar.Item>
                 {/* <Sidebar.Item
                   onClick={() => setActiveTab("addMember")}
@@ -383,6 +391,7 @@ const Dashboard = () => {
             {activeTab === "addMember" && <AddMember />}
             {activeTab === "changePass" && <ChangePass/>}
             {activeTab === "termsCollection" && <TermsCollection/>}
+            {activeTab === "informationSlider" && <InformationSlider/>}
           </div>
         </div>
       </div>
