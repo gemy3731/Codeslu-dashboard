@@ -160,6 +160,18 @@ const Portfolio = () => {
     } else if (e.target.id && e.target.id === "projectPurchaseLink") {
       setEditedItem({ ...editedItem, purchase_link: e.target.value });
       formik.setFieldValue("purchaseLink", e.target.value);
+    }else if (e.target.id && e.target.id === "poster") {
+      setEditedItem({ ...editedItem, poster: e.target.value });
+      formik.setFieldValue("poster", e.target.value);
+    }else if (e.target.id && e.target.id === "video_link") {
+      setEditedItem({ ...editedItem, video_link: e.target.value });
+      formik.setFieldValue("video_link", e.target.value);
+    }else if (e.target.id && e.target.id === "googlePlayLink") {
+      setEditedItem({ ...editedItem, google_play_link: e.target.value });
+      formik.setFieldValue("google_play_link", e.target.value);
+    }else if (e.target.id && e.target.id === "appStoreLink") {
+      setEditedItem({ ...editedItem, app_store_link: e.target.value });
+      formik.setFieldValue("app_store_link", e.target.value);
     }
   };
   

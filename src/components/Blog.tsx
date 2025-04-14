@@ -11,7 +11,16 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 interface ItemType {
   _id: string;
-  // id: string;
+  name: string;
+  date: string;
+  order: number;
+  description: string;
+  title: string;
+  subject: string;
+  image: string;
+}
+interface ItemType1 {
+
   name: string;
   date: string;
   order: number;
@@ -50,39 +59,25 @@ const Blog = () => {
   const [blogs, setBlogs] = useState<ItemType[]>([]);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
   const [openModal, setOpenModal] = useState(false);
-  const [fileName, setFileName] = useState("");
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [value, setValue] = useState(editedItem?.description || '');
   
 
   const formik = useFormik({
     initialValues: {
-      blogTitle: editedItem?.title || "",
-      blogDesc: value || "",
+      title: editedItem?.title || "",
+      description: value || "",
       name: editedItem?.name || "",
       date: editedItem?.date || "",
       subject: editedItem?.subject || "",
-      image: null,
+      image: editedItem?.image||'',
       order: editedItem?.order || 0,
     },
     enableReinitialize: true,
     onSubmit: (values) => {
       // console.log(values);
-      const formData = new FormData();
-      formData.append("title", values.blogTitle);
-      formData.append("description", value);
-      formData.append("name", values.name);
-      formData.append("date", values.date);
-      formData.append("subject", values.subject);
-      formData.append("order", values.order.toString());
-      // formData.append("order", values.order.toString());
-      if (values.image) {
-        formData.append("image", values.image);
-      }
-      // for (const pair of formData.entries()) {
-      //   console.log(`${pair[0]}: ${pair[1]}`);   
-      // }
-      addBlog(formData);
+
+      addBlog(values);
       handleBtn();
     },
   });
@@ -111,6 +106,9 @@ const Blog = () => {
     } else if (e.target.id && e.target.id === "order") {
       setEditedItem({ ...editedItem!, order: parseInt(e.target.value) });
       formik.setFieldValue("order", parseInt(e.target.value));
+    } else if (e.target.id && e.target.id === "slideImage") {
+      setEditedItem({ ...editedItem!, image: e.target.value });
+      formik.setFieldValue("image", e.target.value);
     }
   };
 
@@ -136,12 +134,7 @@ const Blog = () => {
     setEditedItem(values);
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const selectedFile = event.target.files[0];
-      setFileName(selectedFile ? selectedFile.name : "");
-    }
-  };
+
 const getBlogs = async () => {
   // console.log("getBlogs")
   const res = await fetch(`${apiUrl}/api/blog`);
@@ -149,20 +142,12 @@ const getBlogs = async () => {
   // console.log(data)
   setBlogs(data);
 }
- function addBlog(formData: FormData) {
-  const jsonData = {
-    title: formData.get("title"),
-    description: formData.get("description"),
-    name: formData.get("name"),
-    date: formData.get("date")==''?null:formData.get("date"),
-    subject: formData.get("subject"),
-    image: formData.get("image"),
-    order: blogs.length + 1
-  };
+ function addBlog(values:ItemType1 ) {
+
 
   fetch(`${apiUrl}/api/blog`, {
     method: "POST",
-    body: JSON.stringify(jsonData),
+    body: JSON.stringify(values),
     headers: {
       "Content-Type": "application/json"
     },
@@ -190,9 +175,7 @@ function deleteBlog(id: string) {
       console.error("Error:", error);
     });
 }
-  // useEffect(() => {
-  //   console.log(blogs);
-  // }, [blogs]);
+ 
   useEffect(() => {
     getBlogs()
   }, []);
@@ -324,28 +307,15 @@ function deleteBlog(id: string) {
                 <label htmlFor="slideImage" className="block">
                   Blog Image
                 </label>
-                <div className="file-upload">
                   <input
                     type="text"
-                    value={fileName}
-                    className="order-2"
-                    readOnly
+                    name="image"
+                    id="slideImage"
+                    value={editedItem?.image}
+                    onChange={handleChange}
+                    className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                     placeholder="Slide Image"
                   />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="file-input"
-                    name="image"
-                    onChange={handleFileChange}
-                  />
-                  <label
-                    htmlFor="file-input"
-                    className="file-button order-1 md:order-3"
-                  >
-                    Choose Image
-                  </label>
-                </div>
                 {isEdit ? (
                   <button
                     type="button"
