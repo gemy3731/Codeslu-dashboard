@@ -14,7 +14,6 @@ interface ItemType {
 }
 
 const MainSlider = () => {
-  const [fileName, setFileName] = useState("");
   const [imgs, setImgs] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
@@ -24,32 +23,19 @@ const MainSlider = () => {
     initialValues: {
       name: editedItem?.name || "",
       description: editedItem?.description || "",
-      image: null,
+      image: editedItem?.image ||'',
     },
     enableReinitialize: true,
     onSubmit: (values) => {
       console.log(values);
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description);
-      if (values.image) {
-        formData.append("image", values.image);
-      }
-
-      addSlide(formData);
+      addSlide(values);
       handleBtn();
     },
   });
-  function addSlide(formData: FormData) {
-    const jsonData = {
-      name: formData.get("name"),
-      description: formData.get("description"),
-      image: formData.get("image")
-    };
-  
+  function addSlide(values:{image:string,name:string,description:string}) {
     fetch(`${apiUrl}/api/slider`, {
       method: "POST",
-      body: JSON.stringify(jsonData),
+      body: JSON.stringify(values),
       headers: {
         "Content-Type": "application/json"
       },
@@ -99,16 +85,13 @@ const MainSlider = () => {
     } else if (e.target.id && e.target.id === "slideDescription") {
       setEditedItem({ ...editedItem!, description: e.target.value });
       formik.setFieldValue("description", e.target.value);
+    } else if (e.target.id && e.target.id === "slideImage") {
+      setEditedItem({ ...editedItem!, image: e.target.value });
+      formik.setFieldValue("image", e.target.value);
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const selectedFile = event.target.files[0];
-      setFileName(selectedFile ? selectedFile.name : "");
-      formik.setFieldValue("image", selectedFile);
-    }
-  };
+
 
   const getData = async () => {
     const res = await fetch(`${apiUrl}/api/slider`);
@@ -190,27 +173,17 @@ const MainSlider = () => {
                 <label htmlFor="slideImage" className="block">
                   Slide Image
                 </label>
-                <div className="file-upload">
+
                   <input
                     type="text"
-                    value={fileName || editedItem?.image}
-                    className="order-2"
-                    readOnly
+                    name="image"
+                    id="slideImage"
+                    value={editedItem?.image}
+                    onChange={handleChange}
+                    className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                     placeholder="Slide Image"
                   />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="file-input"
-                    onChange={handleFileChange}
-                  />
-                  <label
-                    htmlFor="file-input"
-                    className="file-button order-1 md:order-3"
-                  >
-                    Choose Image
-                  </label>
-                </div>
+
                 {isEdit ? (
                   <button
                     type="button"
