@@ -3,15 +3,29 @@ import { Label } from "flowbite-react";
 import { useFormik } from "formik";
 import { LuLoaderCircle } from "react-icons/lu";
 import toast from "react-hot-toast";
+
 const apiUrl = import.meta.env.VITE_API_URL;
+
+interface IProduct {
+  projectName: string;
+  projectDesc: string;
+  ProjectCat: string;
+  demoLink: string;
+  purchaseLink: string;
+  appStoreLink: string;
+  googlePlayLink: string;
+  video_link: string;
+  projectPoster: string;
+  screens: string[];
+}
+
 const AddProject = () => {
-  // const [projects, setProjects] = useState(null);
-  const [fileName, setFileName] = useState("");
+
   const [category, setCategory] = useState("");
-  const [message, setMessage] = useState("");
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const formik = useFormik({
+  const formik = useFormik<IProduct>({
     initialValues: {
       projectName: "",
       projectDesc: "",
@@ -20,29 +34,14 @@ const AddProject = () => {
       purchaseLink: "",
       appStoreLink: "",
       googlePlayLink: "",
-      video: "",
-      projectPoster: null,
-      screens: null,
+      video_link: "",
+      projectPoster: "",
+      screens: [],
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      // console.log(values);
-      const formData = new FormData();
-      formData.append("name", values.projectName);
-      formData.append("description", values.projectDesc);
-      formData.append("category", values.ProjectCat);
-      formData.append("demo_link", values.demoLink);
-      formData.append("purchase_link", values.purchaseLink);
-      formData.append("app_store", values.appStoreLink);
-      formData.append("google_play", values.googlePlayLink);
-      formData.append("video", values.video);
-      if (values.projectPoster) {
-        formData.append("poster", values.projectPoster);
-      }
-      if (values.screens) {
-        formData.append("screens", values.screens);
-      }
-      addNewProject(formData);
+      console.log(values);
+      addNewProject(values);
     },
   });
 
@@ -52,42 +51,12 @@ const AddProject = () => {
     setCategory(event.target.value);
     formik.setFieldValue("ProjectCat", event.target.value);
   };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const selectedFile = event.target.files[0];
-      setFileName(selectedFile ? selectedFile.name : "");
-    }
-  };
-  const handleScreesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event?.target?.files || event.target.files.length > 6) {
-      (event.target as HTMLInputElement).value = "";
-      setMessage("You can upload a maximum of 6 screenshots.");
-    } else {
-      setMessage(event.target.files.length + " files selected");
-      const filesArray = Array.from(event.target.files);
-      console.log(filesArray);
-    }
-  };
-  function addNewProject(formData: FormData) {
-    const jsonData = {
-      name: formData.get("name"),
-      description: formData.get("description"),
-      category:
-        typeof formData.get("category") === "string" && formData.get("category")
-          ? (formData.get("category") as string).toLowerCase()
-          : "",
-      demo_link: formData.get("demo_link"),
-      purchase_link: formData.get("purchase_link"),
-      app_store: formData.get("app_store"),
-      google_play: formData.get("google_play"),
-      video: formData.get("video"),
-      poster: formData.get("poster"),
-      screens: formData.get("screens"),
-    };
+
+  function addNewProject(values: IProduct) {
     setIsLoading(true);
     fetch(`${apiUrl}/api/projects`, {
       method: "POST",
-      body: JSON.stringify(jsonData),
+      body: JSON.stringify(values),
       headers: {
         "Content-Type": "application/json",
       },
@@ -95,7 +64,7 @@ const AddProject = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        toast.success("One product add successfully", {
+        toast.success("One product added successfully", {
           position: "bottom-right",
           style: { backgroundColor: "#232f3e", color: "white" },
         });
@@ -230,72 +199,63 @@ const AddProject = () => {
               placeholder="Google Play Link"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
             />
-            <label htmlFor="video" className="block">
-              Video
+            <label htmlFor="video_link" className="block">
+              Video Link
             </label>
             <input
-              name="video"
-              value={formik.values.googlePlayLink}
+              name="video_link"
+              value={formik.values.video_link}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
-              id="video"
-              placeholder="Video"
+              id="video_link"
+              placeholder="https://www.youtube.com/watch?v=cX7UEERe1mc"
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
             />
             <label htmlFor="file-input" className="block">
               Project Poster
             </label>
-            <div className="file-upload">
-              <input
-                type="text"
-                value={fileName}
-                className="order-2"
-                readOnly
-                placeholder="Project Image"
-              />
-              <input
-                name="projectPoster"
-                type="file"
-                accept="image/*"
-                id="file-input"
-                onChange={handleFileChange}
-              />
-              <label
-                htmlFor="file-input"
-                className="file-button order-1 md:order-3"
-              >
-                Choose File
-              </label>
-            </div>
-            <div className="file-input-wrapper flex items-baseline gap-3">
-              <label
-                htmlFor="projectScreens"
-                className="custom-file-label block"
-              >
-                Project Screens
-              </label>
-              <input
-                name="screens"
-                type="file"
-                accept="image/*"
-                id="projectScreens"
-                multiple
-                onChange={handleScreesChange}
-                className=" "
-              />
-              {message === "You can upload a maximum of 6 screenshots." ? (
-                <p className="text-red-500 mt-4">{message}</p>
-              ) : (
-                <p className="text-black mt-4">{message}</p>
-              )}
-            </div>
-            <button className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto">
+            <input
+              type="text"
+              name="projectPoster"
+              id="file-input"
+              value={formik.values.projectPoster}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="Project Poster"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+            />
+
+            <label htmlFor="projectScreens" className="block">
+              Project Screens (one link per line)
+            </label>
+            <textarea
+              name="screens"
+              id="projectScreens"
+              value={formik.values.screens.join("\n")}
+              onChange={(e) => {
+               
+                const rawLinks = e.target.value.split("\n");
+                formik.setFieldValue("screens", rawLinks);
+              }}
+              onBlur={() => {
+                
+                const cleanedLinks = formik.values.screens 
+                  .map((link) => link?.trim())
+                  .filter((link) => link !== "");
+                formik.setFieldValue("screens", cleanedLinks);
+              }}
+              placeholder="Enter screen links (one per line)"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+              rows={5}
+            />
+            <button type="submit" className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto">
               {isLoading ? (
                 <LuLoaderCircle className="animate-spin text-[24px]" />
               ) : (
                 "Add Project"
               )}
+              
             </button>
           </form>
         </div>
