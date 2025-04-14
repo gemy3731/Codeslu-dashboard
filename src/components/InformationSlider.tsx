@@ -1,6 +1,6 @@
 import { Modal } from "flowbite-react";
 import { useFormik } from "formik";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -8,22 +8,35 @@ const apiUrl = import.meta.env.VITE_API_URL;
 interface ItemType {
   _id: string;
   image: string;
-  name: string;
-  description: string;
+  isHidden: boolean;
 }
-const myImage = "https://i.ibb.co/qCkd9jS/img1.jpg";
+// const myImage = "https://i.ibb.co/qCkd9jS/img1.jpg";
 const InformationSlider = () => {
 
   const [imgs, setImgs] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
 
+useEffect(() => {
+  getImages()
+}, [])
 
   function onCloseModal() {
     setOpenModal(false);
   }
 
+  const getImages = () => {
+    fetch(`${apiUrl}/api/images`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setImgs(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
   const handleDelete = (id: string) => {
-    fetch(`${apiUrl}/api/informationSlider/${id}`, {
+    fetch(`${apiUrl}/api/images/${id}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -36,7 +49,8 @@ const InformationSlider = () => {
       });
   };
   const addImage = (values: {image:string}) => {
-    fetch(`${apiUrl}/api/informationSlider`, {
+    console.log(values)
+    fetch(`${apiUrl}/api/images`, {
       method: "POST",
       body:JSON.stringify(values),
       headers:{
@@ -46,7 +60,7 @@ const InformationSlider = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        setImgs(data)
+        getImages();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -57,7 +71,7 @@ const InformationSlider = () => {
     initialValues: {
       image: '',
     },
-    // enableReinitialize: true,
+    enableReinitialize: true,
     onSubmit: (values) => {
       console.log(values);
       formik.setValues({image:''})
@@ -70,16 +84,16 @@ const InformationSlider = () => {
     <div className="my-[50px] bg-white rounded-[16px] mx-[10px] md:mx-[40px] lg:mx-[50px] py-[54px] px-[20px]">
       <div className="border rounded-[8px] pt-[42px] px-[27px] pb-[25px] mt-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(10)].map((_, i) => {
+          {imgs?.map((img) => {
             return (
               <div
-                key={i}
+                key={img?._id}
                 className="border rounded-[20px]  text-[14px] flex flex-col  overflow-hidden"
               >
-                <img src={myImage} alt="" />
+                <img src={img?.image} alt="" />
                 <div className="p-2 flex flex-col gap-2">
                   <button
-                    onClick={() => handleDelete(String(i))}
+                    onClick={() => handleDelete(img?._id)}
                     className="bg-[#ff2323] text-white px-3 py-1 rounded-lg w-full mt-1"
                   >
                     Delete
