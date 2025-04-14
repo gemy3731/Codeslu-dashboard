@@ -17,9 +17,27 @@ interface ItemType {
   demo_link: string;
   purchase_link: string;
   order: number;
+  app_store_link: string;
+  google_play_link: string;
+  video_link: string;
   poster?: string;
   screens?: string[];
 }
+interface ItemType1 {
+
+  category: string;
+  name: string;
+  description: string;
+  demo_link?: string;
+  purchase_link?: string;
+  order?: number;
+  app_store_link?: string;
+  google_play_link?: string;
+  video_link?: string;
+  poster?: string;
+  screens?: string[];
+}
+
 
 const projectType = [
   { name: "IOS", icon: <ImAppleinc />, number: 15 },
@@ -33,11 +51,9 @@ const Portfolio = () => {
   const [allProjects, setAllProjects] = useState<ItemType[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editedItem, setEditedItem] = useState<ItemType | null>(null);
-  const [fileName, setFileName] = useState("");
-  const [message, setMessage] = useState("");
+
   const [category, setCategory] = useState("");
-  // const [cat, setCat] = useState("");
-  // const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+
   function handleBtn(){
     setOpenModal(false);
     setEditedItem(null);
@@ -58,46 +74,27 @@ const Portfolio = () => {
       category: editedItem?.category || "",
       demo_link: editedItem?.demo_link || "",
       purchase_link: editedItem?.purchase_link || "",
-      projectPoster: null,
-      screens: null,
-      // order: editedItem?.order || 0,
+      poster: editedItem?.poster||'',
+      screens: editedItem?.screens||[],
+      app_store_link: editedItem?.app_store_link||'',
+      google_play_link: editedItem?.google_play_link||'',
+      video_link: editedItem?.video_link||'',
     },
     enableReinitialize: true,
     onSubmit: (values) => {
       console.log(values);
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description);
-      formData.append("category", values.category);
-      formData.append("demo_link", values.demo_link);
-      formData.append("purchase_link", values.purchase_link);
-      // formData.append("order", values.order.toString());
-      if (values.projectPoster) {
-        formData.append("poster", values.projectPoster);
-      }
-      if (values.screens) {
-        formData.append("screens", values.screens);
-      }
-      // updateProject(formData);
-      updateProject(formData)
+  
+      updateProject(values)
       handleBtn();
     },
   });
 
 
-  function updateProject(formData: FormData) {
-    const jsonData = {
-      name: formData.get("name"),
-      description: formData.get("description"),
-      category: typeof formData.get("category") === "string" && formData.get("category") ? (formData.get("category") as string).toLowerCase() : "",
-      demo_link: formData.get("demo_link"),
-      purchase_link: formData.get("purchase_link"),
-      poster: formData.get("poster"),
-      screens: formData.get("screens"),
-    };
+  function updateProject(values: ItemType1) {
+
     fetch(`${apiUrl}/api/projects/${editedItem?._id}/order`, {
       method: "PUT",
-      body: JSON.stringify(jsonData),
+      body: JSON.stringify(values),
       headers: {
         "Content-Type": "application/json",
       },
@@ -134,12 +131,7 @@ const Portfolio = () => {
       });
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const selectedFile = event.target.files[0];
-      setFileName(selectedFile ? selectedFile.name : "");
-    }
-  };
+
 
   function onCloseModal() {
     setOpenModal(false);
@@ -170,16 +162,7 @@ const Portfolio = () => {
       formik.setFieldValue("purchaseLink", e.target.value);
     }
   };
-  const handleScreesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event?.target?.files || event.target.files.length > 6) {
-      (event.target as HTMLInputElement).value = "";
-      setMessage("You can upload a maximum of 6 screenshots.");
-    } else {
-      setMessage(event.target.files.length + " files selected");
-      const filesArray = Array.from(event.target.files);
-      console.log(filesArray);
-    }
-  };
+  
   const getProjects = async () => {
     // console.log("getBlogs")
     const res = await fetch(`${apiUrl}/api/projects`);
@@ -201,9 +184,7 @@ const Portfolio = () => {
     setProjects(filteredProjects);
   }
 
-  // useEffect(() => {
-  //   console.log(projects);
-  // }, [projects]);
+
 
   useEffect(() => {
     getProjects();
@@ -326,53 +307,77 @@ const Portfolio = () => {
                   placeholder="Purchase Link"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
-                <label htmlFor="file-input" className="block">
+                 <label htmlFor="appStoreLink" className="block">
+              App Store Link
+            </label>
+            <input
+              name="app_store_link"
+              value={editedItem?.app_store_link}
+              onChange={formik.handleChange}
+              type="text"
+              id="appStoreLink"
+              placeholder="App Store Link"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+            />
+            <label htmlFor="googlePlayLink" className="block">
+              Google Play Link
+            </label>
+            <input
+              name="googlePlayLink"
+              value={editedItem?.google_play_link}
+              onChange={formik.handleChange}
+              type="text"
+              id="googlePlayLink"
+              placeholder="Google Play Link"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+            />
+            <label htmlFor="video_link" className="block">
+              Video Link
+            </label>
+            <input
+              name="video_link"
+              value={editedItem?.video_link}
+              onChange={handleChange}
+              type="text"
+              id="video_link"
+              placeholder="https://www.youtube.com/watch?v=cX7UEERe1mc   (cX7UEERe1mc)"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+            />
+                <label htmlFor="poster" className="block">
                   Project Poster
                 </label>
-                <div className="file-upload">
                   <input
                     type="text"
-                    value={fileName}
-                    className="order-2"
-                    readOnly
-                    placeholder="Project Image"
+                    name="poster"
+                    id="poster"
+                    value={editedItem?.poster}
+                    onChange={handleChange}
+                    className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+                    placeholder="Project Poster"
                   />
-                  <input
-                    type="file"
-                    name="projectPoster"
-                    accept="image/*"
-                    id="file-input"
-                    onChange={handleFileChange}
-                  />
-                  <label
-                    htmlFor="file-input"
-                    className="file-button order-1 md:order-3"
-                  >
-                    Choose File
-                  </label>
-                </div>
-                <div className="file-input-wrapper flex items-baseline gap-3">
-                  <label
-                    htmlFor="projectScreens"
-                    className="custom-file-label block"
-                  >
-                    Project Screens
-                  </label>
-                  <input
-                    type="file"
-                    name="projectScreens"
-                    accept="image/*"
-                    id="projectScreens"
-                    multiple
-                    onChange={handleScreesChange}
-                    className=" "
-                  />
-                  {message === "You can upload a maximum of 6 screenshots." ? (
-                    <p className="text-red-500 mt-4">{message}</p>
-                  ) : (
-                    <p className="text-black mt-4">{message}</p>
-                  )}
-                </div>
+                <label htmlFor="projectScreens" className="block">
+              Project Screens (one link per line)
+            </label>
+            <textarea
+              name="screens"
+              id="projectScreens"
+              value={editedItem?.screens?.join("\n")}
+              onChange={(e) => {
+               
+                const rawLinks = e.target.value.split("\n");
+                formik.setFieldValue("screens", rawLinks);
+              }}
+              onBlur={() => {
+                
+                const cleanedLinks = formik.values.screens 
+                  .map((link) => link?.trim())
+                  .filter((link) => link !== "");
+                formik.setFieldValue("screens", cleanedLinks);
+              }}
+              placeholder="Enter screen links (one per line)"
+              className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
+              rows={5}
+            />
                 <button
                   type="submit"
                   className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
@@ -432,7 +437,7 @@ const Portfolio = () => {
               onEnd={(evt)=>{
                 const movedItem = projects[evt.oldIndex!];
                 console.log("movedItem",{...movedItem,order:evt.newIndex!+1});
-                updateOrder({poster:movedItem.poster,name:movedItem.name,_id:movedItem._id,description:movedItem.description,category:movedItem.category,demo_link:movedItem.demo_link,purchase_link:movedItem.purchase_link,screens:movedItem.screens,order:evt.newIndex!+1});
+                updateOrder({poster:movedItem.poster,name:movedItem.name,_id:movedItem._id,description:movedItem.description,category:movedItem.category,demo_link:movedItem.demo_link,purchase_link:movedItem.purchase_link,screens:movedItem.screens,order:evt.newIndex!+1,video_link:movedItem.video_link,app_store_link:movedItem.app_store_link,google_play_link:movedItem.google_play_link});
               }}
             >
               {projects.map((project, i) => (

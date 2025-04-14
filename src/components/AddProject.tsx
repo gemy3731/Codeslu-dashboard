@@ -10,12 +10,12 @@ interface IProduct {
   projectName: string;
   projectDesc: string;
   ProjectCat: string;
-  demoLink: string;
-  purchaseLink: string;
-  appStoreLink: string;
-  googlePlayLink: string;
+  demo_link: string;
+  purchase_link: string;
+  app_store_link: string;
+  google_play_link: string;
   video_link: string;
-  projectPoster: string;
+  poster: string;
   screens: string[];
 }
 
@@ -30,12 +30,12 @@ const AddProject = () => {
       projectName: "",
       projectDesc: "",
       ProjectCat: "",
-      demoLink: "",
-      purchaseLink: "",
-      appStoreLink: "",
-      googlePlayLink: "",
+      demo_link: "",
+      purchase_link: "",
+      app_store_link: "",
+      google_play_link: "",
       video_link: "",
-      projectPoster: "",
+      poster: "",
       screens: [],
     },
     enableReinitialize: true,
@@ -151,8 +151,8 @@ const AddProject = () => {
               Demo Link
             </label>
             <input
-              name="demoLink"
-              value={formik.values.demoLink}
+              name="demo_link"
+              value={formik.values.demo_link}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
@@ -164,8 +164,8 @@ const AddProject = () => {
               Purchase Link
             </label>
             <input
-              name="purchaseLink"
-              value={formik.values.purchaseLink}
+              name="purchase_link"
+              value={formik.values.purchase_link}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
@@ -177,8 +177,8 @@ const AddProject = () => {
               App Store Link
             </label>
             <input
-              name="appStoreLink"
-              value={formik.values.appStoreLink}
+              name="app_store_link"
+              value={formik.values.app_store_link}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
@@ -190,8 +190,8 @@ const AddProject = () => {
               Google Play Link
             </label>
             <input
-              name="googlePlayLink"
-              value={formik.values.googlePlayLink}
+              name="google_play_link"
+              value={formik.values.google_play_link}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
@@ -217,9 +217,9 @@ const AddProject = () => {
             </label>
             <input
               type="text"
-              name="projectPoster"
+              name="poster"
               id="file-input"
-              value={formik.values.projectPoster}
+              value={formik.values.poster}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               placeholder="Project Poster"
