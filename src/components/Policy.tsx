@@ -56,6 +56,7 @@ const Policy = () => {
         .then((data) => {
           console.log("Success:", data);
           setValue(data);
+          getData();
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -65,7 +66,7 @@ const Policy = () => {
       const res = await fetch(`${apiUrl}/api/privacy-policy`);
       const data = await res.json();
       console.log(data);
-      setValue(data[0]);
+      setValue(data[0].description);
     }
     useEffect(() => {
       getData();

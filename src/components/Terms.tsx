@@ -56,6 +56,7 @@ const Terms = () => {
       .then((data) => {
         console.log("Success:", data);
         setValue(data);
+        getData();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -64,8 +65,8 @@ const Terms = () => {
   async function getData() {
     const res = await fetch(`${apiUrl}/api/terms-and-condition`);
     const data = await res.json();
-    console.log(data);
-    setValue(data[0]);
+    console.log(data[0].description);
+    setValue(data[0].description);
   }
   useEffect(() => {
     getData();

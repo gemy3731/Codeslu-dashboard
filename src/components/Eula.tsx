@@ -55,6 +55,7 @@ const Eula = () => {
       .then((data) => {
         console.log("Success:", data);
         setValue(data);
+        getData();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -64,7 +65,7 @@ const Eula = () => {
     const res = await fetch(`${apiUrl}/api/eula`);
     const data = await res.json();
     console.log(data);
-    setValue(data[0]);
+    setValue(data[0].description);
   }
   useEffect(() => {
     getData();
