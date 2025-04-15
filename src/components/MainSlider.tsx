@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const myImage = "https://i.ibb.co/qCkd9jS/img1.jpg";
+// const myImage = "https://i.ibb.co/qCkd9jS/img1.jpg";
 
 interface ItemType {
   _id: string;
@@ -216,7 +216,7 @@ const MainSlider = () => {
                   key={img._id}
                   className="border rounded-[20px]  text-[14px] flex flex-col gap-2 overflow-hidden"
                 >
-                  <img src={myImage} alt={img?.name} />
+                  <img src={img?.image} alt={img?.name} />
                   <div className="p-5 flex flex-col gap-2">
                     <p>
                       <span className="font-bold text-[16px]">
