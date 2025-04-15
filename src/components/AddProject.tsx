@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Label } from "flowbite-react";
 import { useFormik } from "formik";
 import { LuLoaderCircle } from "react-icons/lu";
@@ -17,6 +17,7 @@ interface IProduct {
   video_link: string;
   poster: string;
   screens: string[];
+  isHidden:boolean
 }
 
 const AddProject = () => {
@@ -37,6 +38,7 @@ const AddProject = () => {
       video_link: "",
       poster: "",
       screens: [],
+      isHidden:false
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -78,6 +80,13 @@ const AddProject = () => {
         });
         setIsLoading(false);
       });
+  }
+  const handleRadioChange = (e:ChangeEvent<HTMLInputElement>)=>{
+    if(e.target.value == "false"){
+      formik.setFieldValue("isHidden",false);
+  }else{
+    formik.setFieldValue("isHidden",true)
+  }
   }
 
   return (
@@ -249,6 +258,16 @@ const AddProject = () => {
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
               rows={5}
             />
+            <div className="flex gap-10">
+              <div className="flex items-center gap-2">
+              <label htmlFor="hide">Hide</label>
+              <input type="radio" name="isHidden" value={"true"} onChange={handleRadioChange} id="hide" className="size-3 checked:bg-[#FF9900] focus:ring-[#FF9900]" />
+              </div>
+              <div className="flex items-center gap-2">
+              <label htmlFor="show">Show</label>
+              <input type="radio" name="isHidden" value={"false"} onChange={handleRadioChange} id="show" className="size-3 checked:bg-[#FF9900] focus:ring-[#FF9900]" />
+              </div>
+            </div>
             <button type="submit" className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto">
               {isLoading ? (
                 <LuLoaderCircle className="animate-spin text-[24px]" />

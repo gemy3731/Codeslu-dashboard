@@ -2,7 +2,7 @@ import { ImAppleinc } from "react-icons/im";
 import { GrAndroid } from "react-icons/gr";
 import { FaGamepad } from "react-icons/fa";
 import { IoPlanetSharp } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { Label, Modal } from "flowbite-react";
 import { useFormik } from "formik";
@@ -22,6 +22,7 @@ interface ItemType {
   video_link: string;
   poster?: string;
   screens?: string[];
+  isHidden:boolean;
 }
 interface ItemType1 {
 
@@ -36,6 +37,7 @@ interface ItemType1 {
   video_link?: string;
   poster?: string;
   screens?: string[];
+  isHidden:boolean;
 }
 
 
@@ -79,6 +81,7 @@ const Portfolio = () => {
       app_store_link: editedItem?.app_store_link||'',
       google_play_link: editedItem?.google_play_link||'',
       video_link: editedItem?.video_link||'',
+      isHidden: false,
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -179,7 +182,6 @@ const Portfolio = () => {
     // console.log("getBlogs")
     const res = await fetch(`${apiUrl}/api/projects`);
     const data = await res.json();
-    // console.log(data)
     setAllProjects(data);
   }
   
@@ -222,6 +224,13 @@ const Portfolio = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
+  }
+  const handleRadioChange = (e:ChangeEvent<HTMLInputElement>)=>{
+    if(e.target.value == "false"){
+      formik.setFieldValue("isHidden",false);
+  }else{
+    formik.setFieldValue("isHidden",true)
+  }
   }
   
   return (
@@ -390,6 +399,16 @@ const Portfolio = () => {
               className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
               rows={5}
             />
+            <div className="flex gap-10">
+              <div className="flex items-center gap-2">
+              <label htmlFor="hide">Hide</label>
+              <input type="radio" name="isHidden" value={"true"} onChange={handleRadioChange} id="hide" className="size-3 checked:bg-[#FF9900] focus:ring-[#FF9900]" />
+              </div>
+              <div className="flex items-center gap-2">
+              <label htmlFor="show">Show</label>
+              <input type="radio" name="isHidden" value={"false"} onChange={handleRadioChange} id="show" className="size-3 checked:bg-[#FF9900] focus:ring-[#FF9900]" />
+              </div>
+            </div>
                 <button
                   type="submit"
                   className="bg-[#FF9900] rounded-[8px] px-[44px] py-[8px] text-white w-fit mx-auto"
@@ -449,7 +468,7 @@ const Portfolio = () => {
               onEnd={(evt)=>{
                 const movedItem = projects[evt.oldIndex!];
                 console.log("movedItem",{...movedItem,order:evt.newIndex!+1});
-                updateOrder({poster:movedItem.poster,name:movedItem.name,_id:movedItem._id,description:movedItem.description,category:movedItem.category,demo_link:movedItem.demo_link,purchase_link:movedItem.purchase_link,screens:movedItem.screens,order:evt.newIndex!+1,video_link:movedItem.video_link,app_store_link:movedItem.app_store_link,google_play_link:movedItem.google_play_link});
+                updateOrder({poster:movedItem.poster,name:movedItem.name,_id:movedItem._id,description:movedItem.description,category:movedItem.category,demo_link:movedItem.demo_link,purchase_link:movedItem.purchase_link,screens:movedItem.screens,order:evt.newIndex!+1,video_link:movedItem.video_link,app_store_link:movedItem.app_store_link,google_play_link:movedItem.google_play_link,isHidden:movedItem.isHidden});
               }}
             >
               {projects.map((project, i) => (
