@@ -13,7 +13,7 @@ interface ItemType {
   _id: string;
   name: string;
   date: string;
-  order: number;
+  order?: number;
   description: string;
   title: string;
   subject: string;
@@ -23,7 +23,7 @@ interface ItemType1 {
 
   name: string;
   date: string;
-  order: number;
+  order?: number;
   description: string;
   title: string;
   subject: string;
@@ -71,7 +71,7 @@ const Blog = () => {
       date: editedItem?.date || "",
       subject: editedItem?.subject || "",
       image: editedItem?.image||'',
-      order: editedItem?.order || 0,
+      // order: editedItem?.order || 0,
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -103,10 +103,8 @@ const Blog = () => {
     } else if (e.target.id && e.target.id === "date") {
       setEditedItem({ ...editedItem!, date: e.target.value });
       formik.setFieldValue("date", e.target.value);
-    } else if (e.target.id && e.target.id === "order") {
-      setEditedItem({ ...editedItem!, order: parseInt(e.target.value) });
-      formik.setFieldValue("order", parseInt(e.target.value));
-    } else if (e.target.id && e.target.id === "slideImage") {
+    } 
+     else if (e.target.id && e.target.id === "slideImage") {
       setEditedItem({ ...editedItem!, image: e.target.value });
       formik.setFieldValue("image", e.target.value);
     }
@@ -291,19 +289,6 @@ function deleteBlog(id: string) {
                   placeholder="Subject"
                   className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
                 />
-                <label htmlFor="order" className="block">
-                  Order
-                </label>
-                <input
-                  type="number"
-                  id="order"
-                  name="order"
-                  value={editedItem?.order}
-                  onChange={handleChange}
-                  placeholder="Subject"
-                  className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
-                />
-
                 <label htmlFor="slideImage" className="block">
                   Blog Image
                 </label>

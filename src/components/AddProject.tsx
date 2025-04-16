@@ -7,9 +7,9 @@ import toast from "react-hot-toast";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 interface IProduct {
-  projectName: string;
-  projectDesc: string;
-  ProjectCat: string;
+  name: string;
+  description: string;
+  category: string;
   demo_link: string;
   purchase_link: string;
   app_store_link: string;
@@ -28,9 +28,9 @@ const AddProject = () => {
 
   const formik = useFormik<IProduct>({
     initialValues: {
-      projectName: "",
-      projectDesc: "",
-      ProjectCat: "",
+      name: "",
+      description: "",
+      category: "",
       demo_link: "",
       purchase_link: "",
       app_store_link: "",
@@ -51,7 +51,7 @@ const AddProject = () => {
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setCategory(event.target.value);
-    formik.setFieldValue("ProjectCat", event.target.value);
+    formik.setFieldValue("category", event.target.value.toLowerCase());
   };
 
   function addNewProject(values: IProduct) {
@@ -104,8 +104,8 @@ const AddProject = () => {
               Project Name
             </label>
             <input
-              name="projectName"
-              value={formik.values.projectName}
+              name="name"
+              value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
@@ -118,8 +118,8 @@ const AddProject = () => {
               Project Description{" "}
             </label>
             <input
-              name="projectDesc"
-              value={formik.values.projectDesc}
+              name="description"
+              value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"

@@ -10,7 +10,7 @@ interface AboutUsData {
   right_card_upper_text: string;
   right_card_lower_text: string;
   left_card_image: string;
-  right_card_image: string;
+  Right_card_image: string;
 }
 const AboutUs = () => {
   const [aboutUs, setAboutUs] = useState<AboutUsData>();
@@ -34,7 +34,7 @@ const AboutUs = () => {
       right_card_upper_text: aboutUs?.right_card_upper_text || "",
       right_card_lower_text: aboutUs?.right_card_lower_text || "",
       left_card_image: aboutUs?.left_card_image ||"" ,
-      right_card_image: aboutUs?.right_card_image||"",
+      Right_card_image: aboutUs?.Right_card_image||"",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -143,9 +143,9 @@ const AboutUs = () => {
             </label>
               <input
                 type="text"
-                name="right_card_image"
+                name="Right_card_image"
                 id="right_card_image"
-                value={formik.values.right_card_image}
+                value={formik.values.Right_card_image}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="outline-[#D1D1D1DD] border-[#D1D1D1DD] w-full rounded-[8px]"
